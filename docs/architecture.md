@@ -6,7 +6,7 @@ RepoDeck is a Next.js App Router application with a responsive repository worksp
 
 | Page          | Responsibility                                                                                                                   |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| /             | Landing page, public-repository quick launch, feature explanation, theme showcase, FAQ, and links into the viewer.               |
+| /             | Landing page, fixed public demo launch, feature explanation, theme showcase, FAQ, and links into the viewer.                  |
 | /repositories | Repository picker, branch selection, file tree, file tabs, code viewer, Markdown preview, image viewer, and appearance controls. |
 
 The viewer stores navigation state in the URL:
@@ -21,7 +21,7 @@ The viewer stores navigation state in the URL:
 Example:
 
 ```text
-/repositories?owner=vercel&repo=next.js&ref=canary&path=packages/next/package.json
+/repositories?owner=Abdo12KM&repo=repodeck&ref=main&path=README.md
 ```
 
 Changing the repository or branch clears the selected file. Opening or closing a file updates the path parameter with client-side navigation, so refreshes and shared links restore the same location.
@@ -43,11 +43,11 @@ Credentials and GitHub App secrets remain on the server. The browser receives on
 | Mode                 | Authentication                                       | What it can read                                            | Cache policy                                      |
 | -------------------- | ---------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
 | RepoDeck demo        | Anonymous; fixed public snapshot                     | The public `Abdo12KM/repodeck` snapshot on `main`           | Dedicated Postgres snapshot                      |
-| Public               | Anonymous GitHub API request                         | Repositories GitHub exposes publicly                        | Short shared cache for branches, trees, and files |
+| Direct public read   | Anonymous GitHub API request reached through URL state | Repositories GitHub exposes publicly                      | Short shared cache for branches, trees, and files |
 | Signed in            | GitHub App user authorization                        | Repositories available to that authorization                | Private, no-store responses                       |
 | Private installation | Signed-in user plus selected GitHub App installation | Private repositories allowed by GitHub for the installation | Private, no-store responses                       |
 
-GitHub enforces the repository boundary on every non-demo API request. The demo is intentionally limited to one public repository snapshot; it does not expand the cache to arbitrary or private repositories.
+GitHub enforces the repository boundary on every non-demo API request. The anonymous product entry point is intentionally limited to one public repository snapshot; signed-in users use the authenticated picker for their own repositories. The demo cache never expands to arbitrary or private repositories.
 
 ## Authentication flows
 
@@ -124,6 +124,6 @@ GitHub rate-limit failures are returned as HTTP 429 responses with reset and ret
 
 ## Product boundary and limitations
 
-RepoDeck is read-only. It does not edit files, create commits, push changes, manage issues or pull requests, run repository code, or expose an AI or chat workflow. GitHub API limits still apply to arbitrary public and authenticated requests; the fixed demo avoids per-visitor anonymous calls by serving its bounded snapshot.
+RepoDeck is read-only. It does not edit files, create commits, push changes, manage issues or pull requests, run repository code, or expose an AI or chat workflow. GitHub API limits still apply to direct public and authenticated requests; the fixed demo avoids per-visitor anonymous calls by serving its bounded snapshot.
 
 The tree route uses GitHub’s recursive Git tree endpoint. If GitHub marks a response as truncated, RepoDeck reports an error rather than showing an incomplete tree. GitHub API limits still apply to both anonymous and authenticated requests.

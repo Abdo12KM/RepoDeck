@@ -8,11 +8,12 @@
   A focused, read-only GitHub repository viewer for reading code comfortably across desktop and mobile.
 </p>
 
-RepoDeck opens repository trees and files directly from GitHub without cloning repositories to a local machine. Public repositories can be opened anonymously; signed-in users can browse their accessible repositories and connect selected private repositories through a read-only GitHub App installation.
+RepoDeck opens repository trees and files directly from GitHub without cloning repositories to a local machine. Anonymous visitors start with a fixed, database-backed RepoDeck demo; signed-in users can browse their accessible repositories and connect selected private repositories through a read-only GitHub App installation.
 
 ## Highlights
 
-- Open a repository with `owner/repo`, a GitHub URL, or a direct `tree`/`blob` URL.
+- Open the real RepoDeck demo from the landing page without spending anonymous GitHub requests.
+- Sign in to browse your public repositories or connect selected private repositories with read-only access.
 - Browse branches and a virtualized file tree with folder expansion, filtering, and recent-file history.
 - Search files, branches, repositories, and viewer actions from the command palette.
 - Read source with Shiki syntax highlighting, line numbers, wrapping, font-size controls, and 18 code themes.
@@ -30,7 +31,7 @@ RepoDeck is intentionally a viewer, not an editor or Git client. The current app
 - persist arbitrary or private repository trees or file contents in the application database;
 - use a global GitHub PAT, password login, Redis session store, AI provider, agent loop, or chat history.
 
-The landing page includes one deliberate exception: the public RepoDeck demo uses a fixed snapshot of this repository stored in dedicated cache tables so anonymous visitors do not spend GitHub requests while exploring it. Other public repositories use short-lived response caching, and authenticated tree and file responses are marked private and are not shared-cached.
+The landing page and anonymous repository picker intentionally expose only one public entry point: the fixed RepoDeck demo. Its tree and files are stored in dedicated cache tables so visitors do not spend GitHub requests while exploring it. Direct public-read routes retain short-lived response caching for shareable or compatibility URLs, and authenticated tree and file responses are marked private and are not shared-cached.
 
 ## Live application
 
@@ -141,27 +142,18 @@ The primary landing page links to the real viewer route for [Abdo12KM/repodeck](
 /repositories?owner=Abdo12KM&repo=repodeck&ref=main
 ```
 
-The demo tree and files are served from the fixed public snapshot in Postgres, so visitors can browse the full codebase without making one anonymous GitHub request per page load. For arbitrary public repositories, GitHub rate limits still apply; sign in when you need to browse several repositories or use a larger request budget.
+The demo tree and files are served from the fixed public snapshot in Postgres, so visitors can browse the full codebase without making one anonymous GitHub request per page load. If an existing direct public URL is used, GitHub rate limits still apply; sign in when you need to browse several repositories or use a larger request budget.
 
-### Open public repositories
+### Browse your repositories
 
-No GitHub account is required for public repositories. The repository picker accepts:
-
-```text
-vercel/next.js
-https://github.com/facebook/react
-https://github.com/shadcn-ui/ui/tree/main/packages/cli
-https://github.com/shadcn-ui/ui/blob/main/packages/cli/src/index.ts
-```
-
-The viewer resolves the default branch when a bare repository is entered. A direct `tree` or `blob` URL preserves the branch and path.
+The anonymous repository picker does not ask visitors to paste arbitrary public repository URLs. Sign in with GitHub to browse your own public repositories or connect selected private repositories through the GitHub App. This uses your authenticated request budget rather than the shared anonymous budget.
 
 ### Share a file or branch
 
 Viewer state is encoded in query parameters:
 
 ```text
-/repositories?owner=vercel&repo=next.js&ref=canary&path=packages/next/package.json
+/repositories?owner=Abdo12KM&repo=repodeck&ref=main&path=README.md
 ```
 
 The parameters are:
@@ -247,7 +239,8 @@ src/
 │  ├─ page.tsx              # Landing page
 │  └─ repositories/page.tsx # Repository viewer route
 ├─ components/
-│  ├─ landing/              # Marketing and quick-launch UI
+│  ├─ landing-v3/           # Primary landing page
+│  ├─ landing/              # Preserved legacy landing components
 │  ├─ repo/                 # Repository selection, tree, and file viewers
 │  ├─ theme/                # Appearance settings and theme bootstrap
 │  ├─ ui/                   # Shared Shadcn-style primitives

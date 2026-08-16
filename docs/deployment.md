@@ -173,7 +173,7 @@ If the domain or host changes, update DNS, GitHub App callback URLs, the Setup U
 
 ## Verification checklist
 
-1. Open the landing page and launch a known public repository anonymously.
+1. Open the landing page and launch the fixed RepoDeck demo anonymously; confirm the tree and README load from the cached snapshot.
 2. Open a direct tree or blob URL and confirm branch and path state are restored.
 3. Sign in and load the authenticated repository picker.
 4. Refresh repositories and switch branches.

@@ -2,13 +2,13 @@
 
 ## Product surface
 
-RepoDeck is a read-only GitHub repository viewer. The `/landing` page should get a developer to a public repository quickly, explain the public/private access boundary honestly, and make the viewer feel useful on a phone as well as on a large screen.
+RepoDeck is a read-only GitHub repository viewer. The primary landing page is `/`; `/landing` redirects to it, and the older landing-v2 source remains preserved for reference without being the public entry point. The current landing page points visitors to one real, cached RepoDeck demo and explains that GitHub sign-in is required to browse their own repositories.
 
-## `/landing` visual world
+The anonymous UI intentionally does not expose an arbitrary repository URL probe. This keeps the first-run experience honest about GitHub’s small unauthenticated request budget while preserving the real viewer route and shareable repository state.
 
-The page is an event-display-inspired reading instrument: a near-black canvas, quiet ruled structure, repository paths as coordinates, and a selected file rendered as the active signal. Cyan carries the current reading surface, yellow carries the primary action or branch path, and red/blue are reserved for related signals in the illustrative viewer.
+## `/` visual world
 
-The visual language is intentionally separate from the existing root landing page so the new route can be evaluated as a complete alternative without changing `/`.
+The page is a quiet, dark reading surface: restrained panels, repository-aware typography, one clear demo action, and explicit public/private access boundaries. Cyan marks active reading and links, while the existing theme tokens carry the rest of the interface without adding a fake repository preview to the hero.
 
 ## Tokens
 
@@ -21,28 +21,27 @@ The visual language is intentionally separate from the existing root landing pag
 
 ## Composition
 
-- Hero: a direct repository probe paired with a believable selected-file reader state.
-- Boundary rail: four concrete product constraints below the first view.
-- Read path: a three-stage ordered path from reference to shareable file URL.
-- Mobile proof: an actual phone-sized interactive preview, not a desktop screenshot scaled down.
-- Access: public and private flows are separated into two plain-language columns.
+- Hero: a direct route into the real cached RepoDeck demo plus a sign-in path for personal repositories.
+- Theme studio: a focused demonstration of code-reading themes and visual controls.
+- Access boundary: the fixed public demo is separated from authenticated public and selected-private access.
+- FAQ: concrete answers about caching, cloning, permissions, and shareable viewer state.
 - Close: one final promise and one route into the real viewer.
 
 ## Responsive contract
 
-- At desktop widths, the hero uses a copy/display split and the viewer keeps file rail, event view, and code pane visible.
-- Below the tablet breakpoint, the code pane moves below the event view.
-- At phone widths, the file rail becomes a full-width “File map” disclosure, the hero form stacks, the boundary rail becomes a two-by-two grid, and the phone preview keeps controls in a bottom bar.
-- Touch targets remain generous, focus states remain visible, content stays inside the viewport, and bottom controls account for `safe-area-inset-bottom`.
+- At desktop widths, the hero keeps the primary action and access explanation legible within a wide reading canvas.
+- The theme studio and access boundary use restrained two-column layouts when space allows and stack without losing hierarchy on smaller screens.
+- At phone widths, actions stack, copy stays readable, and cards remain inside the viewport with comfortable touch targets.
+- Touch targets remain generous, focus states remain visible, and content stays inside the viewport.
 
 ## Interaction and accessibility
 
-- The repository probe accepts `owner/repository`, GitHub repository URLs, and direct `tree`/`blob` paths, then routes to `/repositories`.
-- The event display lets users select a file, open the mobile file map, and copy the selected preview.
-- The phone preview toggles between files and code to demonstrate the mobile reading flow.
-- The page includes a skip link, semantic headings, labelled form controls, labelled navigation, visible focus rings, inline validation, reduced-motion handling, and no color-only meaning.
+- The demo CTA opens `/repositories?owner=Abdo12KM&repo=repodeck&ref=main`, where the real cached tree and files are readable.
+- The sign-in CTA routes to the existing GitHub authorization flow for the authenticated repository picker.
+- Viewer state remains shareable through repository, branch, and file-path query parameters.
+- The page includes a skip link, semantic headings, labelled controls, labelled navigation, visible focus rings, reduced-motion handling, and no color-only meaning.
 - Decorative logo imagery is empty-alt when visible brand text already provides the name.
 
 ## Content guardrails
 
-Use precise repository-viewer language: read, inspect, branch, file, path, share, public, private, read-only. Avoid IDE replacement claims, clone-first workflow language, inflated speed claims, generic SaaS benefit grids, and any implication that RepoDeck edits or executes repository code.
+Use precise repository-viewer language: read, inspect, branch, file, path, share, demo, public, private, read-only, cached. Avoid arbitrary anonymous URL-probe promises, IDE replacement claims, clone-first workflow language, inflated speed claims, generic SaaS benefit grids, and any implication that RepoDeck edits or executes repository code.

@@ -8,7 +8,6 @@ import {
   Clock,
   Search,
   ExternalLink,
-  SlidersHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +27,6 @@ import { useRepoTree } from "@/hooks/useRepoTree";
 import { useRecentFiles, type RecentFileItem } from "@/hooks/useRecentFiles";
 import { useModifierKey } from "@/hooks/useModifierKey";
 import { useGlobalShortcuts } from "@/hooks/useGlobalShortcuts";
-import { useAppearanceSettings } from "@/hooks/useAppearanceSettings";
 import { ViewerHeader } from "./ViewerHeader";
 import { ViewerTreePanel } from "./ViewerTreePanel";
 import { ViewerTabs } from "./ViewerTabs";
@@ -53,14 +51,12 @@ export function RepositoryViewer() {
     selectedPath,
     openFile,
     closeFile,
-    openRepository,
     selectRepository,
   } = useViewer();
 
   const searchParams = useSearchParams();
   const { authenticated, connectPrivate } = useAuth();
   const { recentFiles, addRecentFile } = useRecentFiles(owner, repo);
-  const { settings } = useAppearanceSettings();
 
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [quickSwitcherOpen, setQuickSwitcherOpen] = useState(false);
@@ -68,7 +64,7 @@ export function RepositoryViewer() {
   const [repoPickerOpen, setRepoPickerOpen] = useState(false);
   const [appearanceOpen, setAppearanceOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [sidebarHovered, setSidebarHovered] = useState(false);
+  const [sidebarHovered] = useState(false);
   const [openFiles, setOpenFiles] = useState<string[]>([]);
   const treePanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -293,6 +289,7 @@ export function RepositoryViewer() {
       {/* Main Workspace Area */}
       {!hasRepo ? (
         <EmptyRepositoryState
+          authenticated={authenticated}
           onChoose={openRepoPicker}
           onOpenQuickSwitcher={openQuickSwitcher}
           onOpenShortcutsHelp={openShortcutsHelp}
@@ -480,7 +477,6 @@ export function RepositoryViewer() {
         currentRepo={repo}
         currentBranch={branch}
         onSelectRepository={selectRepository}
-        onOpenPublicRepository={openRepository}
         onConnectPrivate={connectPrivate}
       />
 
@@ -735,6 +731,7 @@ function RepositoryWorkspaceWelcome({
 }
 
 interface EmptyRepositoryStateProps {
+  authenticated: boolean;
   onChoose: () => void;
   onOpenQuickSwitcher?: () => void;
   onOpenShortcutsHelp?: () => void;
@@ -742,6 +739,7 @@ interface EmptyRepositoryStateProps {
 }
 
 function EmptyRepositoryState({
+  authenticated,
   onChoose,
   onOpenQuickSwitcher,
   onOpenShortcutsHelp,
@@ -753,8 +751,8 @@ function EmptyRepositoryState({
   >([]);
 
   useEffect(() => {
-    setRecentRepos(getRecentRepos());
-  }, []);
+    setRecentRepos(authenticated ? getRecentRepos() : []);
+  }, [authenticated]);
 
   return (
     <main className="bg-background flex min-h-0 flex-1 flex-col items-center justify-center overflow-auto p-6 text-center select-none">
@@ -771,8 +769,8 @@ function EmptyRepositoryState({
               RepoDeck Workspace
             </h2>
             <p className="text-muted-foreground mx-auto mt-1.5 max-w-sm text-xs leading-relaxed">
-              Open any public repository by URL or pick from your GitHub account
-              to read code with studio-grade highlighting.
+              Open the cached RepoDeck demo, or sign in to browse your GitHub
+              repositories with studio-grade highlighting.
             </p>
           </div>
         </div>
@@ -780,12 +778,26 @@ function EmptyRepositoryState({
         {/* Quick Action Triggers */}
         <div className="flex flex-wrap items-center justify-center gap-2">
           <Button
+            asChild
+            size="sm"
+            variant="outline"
+            className="h-9 cursor-pointer gap-2.5 px-4 text-xs font-semibold"
+          >
+            <a href="/repositories?owner=Abdo12KM&repo=repodeck&ref=main">
+              <RepoDeckIcon size={18} variant="flat" className="h-4.5 w-4.5" />
+              <span>Open RepoDeck demo</span>
+            </a>
+          </Button>
+
+          <Button
             onClick={onChoose}
             size="sm"
             className="h-9 cursor-pointer gap-2.5 px-4 text-xs font-semibold shadow-xs"
           >
             <RepoDeckIcon size={18} variant="flat" className="h-4.5 w-4.5" />
-            <span>Open Repository</span>
+            <span>
+              {authenticated ? "Choose a repository" : "Sign in to browse"}
+            </span>
             <Kbd className="bg-primary-foreground/20 text-primary-foreground text-[10px]">
               {modifier}+O
             </Kbd>
@@ -876,7 +888,7 @@ function EmptyRepositoryState({
             onClick={onChoose}
             className="hover:text-foreground inline-flex cursor-pointer items-center gap-1.5 transition-colors"
           >
-            <Kbd>{modifier}+O</Kbd> Open Repository
+            <Kbd>{modifier}+O</Kbd> Browse repositories
           </button>
           {onOpenQuickSwitcher && (
             <button

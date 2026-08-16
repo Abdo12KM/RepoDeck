@@ -1,12 +1,12 @@
 # Session findings: RepoDeck landing surface and repository search
 
-> Status: design and architecture findings recorded on 2026-08-15. The `/landing` redesign described here is implemented. Repository-wide content search is investigated and specified here, but is not implemented yet.
+> Status: design and architecture findings recorded on 2026-08-15. The V3 landing page is now primary at `/`; `/landing` redirects to it, and the older landing-v2 source remains preserved but is not the public entry point. Repository-wide content search is investigated and specified here, but is not implemented yet.
 
 This document consolidates the project understanding, design decisions, validation results, and search feasibility analysis from the landing-page redesign session. It is intentionally explicit about what exists in the codebase versus what is a proposed next capability.
 
 ## 1. Product understanding
 
-RepoDeck is a read-only GitHub repository viewer. Its core value is not replacing a local development environment; it is reducing the time between “I have a repository or file URL” and “I can comfortably read the relevant code.”
+RepoDeck is a read-only GitHub repository viewer. Its core value is not replacing a local development environment; it is giving visitors a real, comfortable code-reading experience through the cached RepoDeck demo, then letting signed-in users browse their own repositories.
 
 ### Primary users
 
@@ -17,8 +17,8 @@ RepoDeck is a read-only GitHub repository viewer. Its core value is not replacin
 
 ### Core flow
 
-1. A visitor enters `owner/repository`, a GitHub repository URL, or a direct `tree`/`blob` URL.
-2. RepoDeck resolves the default branch when necessary.
+1. A visitor opens the fixed RepoDeck demo from the landing page, or signs in to choose an accessible repository.
+2. RepoDeck resolves the selected repository and branch.
 3. The viewer loads the repository tree and lets the user select a branch, folder, or file.
 4. File content is fetched only after a file is selected.
 5. The selected repository, branch, and path remain addressable in URL query parameters.
@@ -36,7 +36,7 @@ RepoDeck deliberately does not:
 - add an AI chat, agent loop, or chat persistence layer;
 - use password authentication or Redis for this product surface.
 
-Public repositories can be viewed anonymously. GitHub sign-in provides access to the user’s public repositories. Private access is provided through a GitHub App installation with repository-level read-only selection.
+The public UI exposes one anonymous entry point: the fixed, cached RepoDeck demo. GitHub sign-in provides access to the user’s public repositories. Private access is provided through a GitHub App installation with repository-level read-only selection.
 
 ### Relevant implementation shape
 
@@ -48,7 +48,7 @@ Public repositories can be viewed anonymously. GitHub sign-in provides access to
 - Signed sessions and encrypted GitHub user tokens.
 - Desktop resizable tree/viewer workspace and mobile drawers/bottom navigation.
 
-The existing implementation notes are documented in [Architecture](./ARCHITECTURE.md), [Security](./SECURITY.md), and [Deployment](./DEPLOYMENT.md).
+The existing implementation notes are documented in [Architecture](./architecture.md), [Security](./security.md), and [Deployment](./deployment.md).
 
 ## 2. Existing viewer findings
 
@@ -99,13 +99,15 @@ Additional references and checks used during the work:
 
 The product context required by the design skills was recorded in [`PRODUCT.md`](../PRODUCT.md). The durable visual system for the new route was recorded in [`DESIGN.md`](../DESIGN.md).
 
-## 4. `/landing` redesign findings
+## 4. Historical `/landing` redesign findings
+
+The following section records the earlier landing-v2 direction for context. Its URL-probe components remain in the repository as preserved source, but they are not the primary public landing page and are not used by `/`.
 
 ### Route and scope
 
-The new page is a separate route at [`/landing`](../src/app/landing/page.tsx). The existing root landing page at `/` was left unchanged.
+The earlier design was implemented in preserved components under `landing-v2`. The current [`/landing`](../src/app/landing/page.tsx) route redirects to the V3 root landing page, and `/` is the primary public surface.
 
-New route components:
+Historical route components:
 
 - [`LandingV2Page`](../src/components/landing-v2/LandingV2Page.tsx) — page composition, copy, access boundary, and CTA sections.
 - [`LandingV2Header`](../src/components/landing-v2/LandingV2Header.tsx) — desktop navigation, mobile menu, sign-in action, and viewer CTA.
@@ -114,62 +116,48 @@ New route components:
 - [`LandingMobilePreview`](../src/components/landing-v2/LandingMobilePreview.tsx) — phone-sized file/code interaction used to demonstrate the mobile reading flow.
 - [`LandingV2Page.module.css`](../src/components/landing-v2/LandingV2Page.module.css) — scoped visual system and responsive behavior.
 
-### Chosen visual direction
+### Current V3 visual direction
 
-The page is an event-display-inspired reading instrument rather than a generic SaaS landing page:
+The primary page is a calm, dark product surface rather than an anonymous repository-probe landing page:
 
-- near-black technical canvas;
-- ruled panels and coordinate-like metadata;
-- cyan for the selected reading surface;
-- yellow for primary action and branch-path signals;
-- red and blue for related signal tracks;
-- Geist Sans for product copy and Geist Mono for paths, metadata, file labels, and technical rails;
-- code and repository paths treated as content, not decorative filler;
-- no gradient hero wash, no repeated generic feature-card grid, and no inflated “IDE replacement” claim.
+- a restrained hero with one CTA into the real cached RepoDeck viewer;
+- a secondary GitHub sign-in path for personal repositories;
+- a focused theme studio for code-reading presentation;
+- a plain-language public/private access boundary;
+- FAQ answers grounded in the actual cache, session, and permission behavior;
+- no fake repository preview, arbitrary URL form, inflated IDE claim, or generic feature-card wall.
 
-The first viewport puts the actual repository-entry action beside a believable selected-file reader state. The page then explains the shorter reading path, proves the mobile behavior, states the public/private boundary, and closes with one route into the actual viewer.
+### Current page narrative
 
-### Page narrative
+1. **Hero:** Open the real RepoDeck demo or sign in to browse your repositories.
+2. **Theme studio:** Show how code-reading presentation can be adjusted without turning the product into an editor.
+3. **Access boundary:** Separate the fixed public demo from authenticated public and selected-private access.
+4. **FAQ:** Explain caching, cloning, permissions, and shareable viewer state.
+5. **Close:** Return visitors to the actual `/repositories` demo route.
 
-1. **Hero:** “Read the repository. Keep the rest of the machine closed.”
-   - Direct repository probe.
-   - Public anonymous and private read-only trust signals.
-   - Interactive event-display viewer showing a file tree, selected file, branch, and code.
-2. **Boundary rail:** GitHub API/server-side, zero local clones, URL-addressable state, desktop/tablet/mobile.
-3. **Read path:** paste the reference, follow the signal, share the exact path.
-4. **Mobile proof:** file map, code view, and bottom navigation inside a phone-sized preview.
-5. **Access:** public browsing versus private GitHub App selection.
-6. **Close:** “Bring the URL. Leave the clone.”
+### Current interaction findings
 
-### Interaction findings
-
-- Repository input accepts `owner/repository`, GitHub repository URLs, and direct `tree`/`blob` URLs.
-- Invalid references produce an inline alert rather than a silent failure.
-- Example repository buttons exercise the same open flow as the form.
-- The event display supports file selection, mobile file-map expansion, and copying the selected preview.
-- The phone preview switches between files and code, including the bottom `Files`, `Read`, `Search`, and `Tools` actions.
-- Header navigation collapses to a labelled mobile menu.
-- Public and private CTAs route to existing application flows instead of inventing new authentication behavior.
+- The demo CTA opens `/repositories?owner=Abdo12KM&repo=repodeck&ref=main`.
+- Anonymous visitors are not asked to enter arbitrary public repository URLs.
+- The repository picker exposes the authenticated GitHub repository list after sign-in.
+- Viewer state remains shareable through repository, branch, and file-path query parameters.
+- Header navigation, buttons, links, and the skip link use labelled semantic controls.
 
 ### Responsive contract
 
-- Desktop uses a copy/display hero split and keeps the repository rail, event view, and code pane visible together.
-- Tablet reduces the hero gap and moves the code pane below the event view when the display becomes constrained.
-- Phone widths stack the hero form, turn the file rail into a full-width `File map` disclosure, and use a two-by-two product-boundary rail.
-- The mobile section uses a real phone composition rather than simply shrinking a desktop screenshot.
-- Bottom controls include `safe-area-inset-bottom` handling.
-- The final browser checks found no horizontal overflow at 390px, 768px, or 1440px widths.
+- The hero actions stack cleanly at phone widths and remain reachable without horizontal scrolling.
+- Theme studio controls and access-boundary cards collapse from columns to a readable single-column flow.
+- FAQ and final CTA sections preserve hierarchy and touch-friendly targets on small screens.
+- The current browser checks found no horizontal overflow at 390px, 768px, or 1440px widths.
 
 ### Accessibility and interface quality
 
 - Skip link targets the main content.
-- Navigation regions and icon-only buttons have labels.
-- The repository input has an associated label, name, type, autocomplete decision, and inline error state.
+- Navigation regions and icon-only controls have labels.
 - Buttons are used for actions and links for navigation.
-- Focus-visible states are defined for navigation, forms, file controls, and CTAs.
-- Decorative logo imagery uses empty alt text when the adjacent visible brand name is already present.
-- Reduced-motion rules disable the page’s nonessential animation and transition movement.
-- The final axe audit reported zero violations. Axe left one incomplete color-contrast check for the overlapping SVG/event-display elements because the tool could not fully infer their backgrounds; this was not reported as a violation.
+- Focus-visible states are defined for navigation and CTAs.
+- Decorative logo imagery uses empty alt text when adjacent visible brand text already provides the name.
+- Reduced-motion rules disable nonessential animation and transition movement.
 
 ## 5. Validation results
 
@@ -180,7 +168,7 @@ The following checks were run after the implementation:
 | `pnpm typecheck` | Passed |
 | `pnpm lint` | Passed with 0 errors; existing warnings are concentrated in skill/tool scripts outside the new route |
 | `pnpm test:run` | 9 test files and 33 tests passed; the existing test environment emitted a non-fatal Canvas API warning |
-| `pnpm build` | Passed; `/landing` was generated as a static App Router route |
+| `pnpm build` | Passed; `/` is the primary landing route and `/landing` remains a compatibility redirect |
 | Anti-UI-Slop detector | `[]` for the new route/components |
 | Impeccable detector | `[]` for the new route/components |
 | UI Design detector | `[]` for the new route/components |
@@ -188,7 +176,7 @@ The following checks were run after the implementation:
 | Accessibility audit | 0 violations |
 | Responsive overflow | `scrollWidth === viewport width` at 390px and 768px |
 
-Browser interaction checks included the mobile navigation menu, file-map disclosure, README file selection, phone code view, tools action, copy control, and invalid repository input.
+Browser interaction checks included the fixed demo route, README file selection, authenticated repository picker, file controls, and the responsive landing surface. The current anonymous flow intentionally has no arbitrary repository URL input.
 
 ## 6. Search capability findings
 

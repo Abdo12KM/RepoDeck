@@ -10,12 +10,6 @@ interface ViewerContextValue {
   selectedPath: string | null;
   hasRepo: boolean;
   selectRepository: (owner: string, repo: string, branch: string) => void;
-  openRepository: (
-    owner: string,
-    repo: string,
-    branch: string,
-    path?: string,
-  ) => void;
   setBranch: (branch: string) => void;
   openFile: (path: string) => void;
   closeFile: () => void;
@@ -60,23 +54,6 @@ export function ViewerProvider({ children }: { children: React.ReactNode }) {
     [updateSelection],
   );
 
-  const openRepository = useCallback(
-    (
-      nextOwner: string,
-      nextRepo: string,
-      nextBranch: string,
-      nextPath?: string,
-    ) => {
-      updateSelection({
-        owner: nextOwner,
-        repo: nextRepo,
-        ref: nextBranch,
-        path: nextPath ?? null,
-      });
-    },
-    [updateSelection],
-  );
-
   const setBranch = useCallback(
     (nextBranch: string) => {
       updateSelection({ ref: nextBranch, path: null });
@@ -101,7 +78,6 @@ export function ViewerProvider({ children }: { children: React.ReactNode }) {
       branch,
       selectedPath,
       hasRepo: Boolean(owner && repo && branch),
-      openRepository,
       selectRepository,
       setBranch,
       openFile,
@@ -116,7 +92,6 @@ export function ViewerProvider({ children }: { children: React.ReactNode }) {
       selectedPath,
       selectRepository,
       setBranch,
-      openRepository,
     ],
   );
 

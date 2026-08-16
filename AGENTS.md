@@ -14,7 +14,7 @@ RepoDeck is a read-only GitHub repository viewer built with Next.js App Router, 
 
 ## Product boundaries
 
-- Public repositories can be opened anonymously by URL.
+- The public UI opens the fixed cached `Abdo12KM/repodeck` demo anonymously; do not reintroduce arbitrary public-repository URL inputs or anonymous recent-repository shortcuts.
 - GitHub sign-in provides access to the user’s public repositories.
 - Private repository access comes only from a GitHub App installation with repository-level read-only selection.
 - The app does not edit, commit, or push repository files.

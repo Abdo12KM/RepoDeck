@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Clock, Loader2, Sparkles, GitBranch, Check } from "lucide-react";
+import { Loader2, Sparkles, X } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import type { Repo } from "@/types/github";
 import { useRepos, useBranches } from "@/hooks/useGitHub";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Dialog,
@@ -19,10 +18,6 @@ import { RepoSelectionStep } from "@/components/repo/selection/RepoSelectionStep
 import { BranchSelectionStep } from "@/components/repo/selection/BranchSelectionStep";
 import { BranchSwitcherPills } from "@/components/repo/selection/BranchSwitcherPills";
 import { RepoListItem } from "@/components/repo/selection/RepoListItem";
-import { RepoIcon } from "@/components/repo/RepoIcon";
-import { RepoDeckIcon } from "@/components/ui/RepoDeckLogo";
-import { PublicRepositoryForm } from "./PublicRepositoryForm";
-import { cn } from "@/lib/utils";
 
 interface RecentRepoItem {
   owner: string;
@@ -68,12 +63,6 @@ interface RepositoryPickerDialogProps {
   currentRepo: string | null;
   currentBranch: string | null;
   onSelectRepository: (owner: string, repo: string, branch: string) => void;
-  onOpenPublicRepository: (
-    owner: string,
-    repo: string,
-    branch: string,
-    path?: string,
-  ) => void;
   onConnectPrivate: () => void;
 }
 
@@ -84,23 +73,16 @@ export function RepositoryPickerDialog({
   currentRepo,
   currentBranch,
   onSelectRepository,
-  onOpenPublicRepository,
   onConnectPrivate,
 }: RepositoryPickerDialogProps) {
   const [search, setSearch] = useState("");
   const [step, setStep] = useState<"repo" | "branch">("repo");
   const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
-  const [recentRepos, setRecentRepos] = useState<RecentRepoItem[]>([]);
   const { authenticated, isLoading: authLoading, signIn } = useAuth();
-  const {
-    repos,
-    isLoading,
-    isRefreshing,
-    lastRefreshed,
-    error,
-    refresh,
-    mutate,
-  } = useRepos(search, authenticated);
+  const { repos, isLoading, isRefreshing, error, refresh, mutate } = useRepos(
+    search,
+    authenticated,
+  );
 
   const branchTarget = step === "branch" ? selectedRepo : null;
   const { branches, isLoading: branchesLoading } = useBranches(
@@ -113,7 +95,6 @@ export function RepositoryPickerDialog({
     setStep("repo");
     setSelectedRepo(null);
     setSearch("");
-    setRecentRepos(getRecentRepos());
   }, [open]);
 
   const currentRepoData = useMemo<Repo | null>(() => {
@@ -168,12 +149,6 @@ export function RepositoryPickerDialog({
     onOpenChange(false);
   };
 
-  const handleOpenRecent = (item: RecentRepoItem) => {
-    saveRecentRepo(item.owner, item.repo, item.branch);
-    onSelectRepository(item.owner, item.repo, item.branch);
-    onOpenChange(false);
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
       <DialogContent
@@ -182,7 +157,7 @@ export function RepositoryPickerDialog({
           if (event.currentTarget instanceof HTMLElement)
             event.currentTarget.focus();
         }}
-        className="border-border/80 bg-background fixed top-0 left-0 bottom-18 z-50 flex h-auto max-h-[calc(100dvh-4.5rem)] w-dvw max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 p-0 shadow-2xl ring-0 sm:top-1/2 sm:left-1/2 sm:bottom-auto sm:h-[85vh] sm:max-h-[680px] sm:w-full sm:max-w-2xl sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border sm:ring-1"
+        className="border-border/80 bg-background fixed top-0 bottom-18 left-0 z-50 flex h-auto max-h-[calc(100dvh-4.5rem)] w-dvw max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 p-0 shadow-2xl ring-0 sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:h-[85vh] sm:max-h-[680px] sm:w-full sm:max-w-2xl sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border sm:ring-1"
       >
         <VisuallyHidden>
           <DialogTitle>Repository Picker</DialogTitle>
@@ -200,18 +175,28 @@ export function RepositoryPickerDialog({
             </div>
           ) : !authenticated ? (
             <ScrollArea className="min-h-0 flex-1" hideHorizontal>
-              <PublicRepositoryForm
-                onClose={() => onOpenChange(false)}
-                onOpen={(owner, repo, branch, path) => {
-                  saveRecentRepo(owner, repo, branch);
-                  onOpenPublicRepository(owner, repo, branch, path);
-                  onOpenChange(false);
-                }}
-              />
+              <div className="border-border/80 flex items-center justify-between border-b px-4 py-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">Browse repositories</p>
+                  <p className="text-muted-foreground mt-0.5 text-xs">
+                    Sign in to choose from your GitHub repositories.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={() => onOpenChange(false)}
+                  aria-label="Close repository picker"
+                  className="shrink-0"
+                >
+                  <X />
+                </Button>
+              </div>
 
               {/* Current Active Workspace Card (even when unauthenticated) */}
               {currentOwner && currentRepo && currentRepoData && (
-                <div className="border-b p-4 bg-muted/5">
+                <div className="bg-muted/5 border-b p-4">
                   <div className="border-primary/30 bg-primary/5 w-full max-w-full space-y-3 overflow-x-hidden rounded-2xl border p-3.5 shadow-xs sm:p-4">
                     <div className="flex items-center justify-between">
                       <p className="text-primary text-[11px] font-bold tracking-wider uppercase">
@@ -241,54 +226,6 @@ export function RepositoryPickerDialog({
                 </div>
               )}
 
-              {/* Recent repositories if any */}
-              {recentRepos.length > 0 && (
-                <div className="bg-muted/10 border-b p-4">
-                  <p className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
-                    <Clock className="h-3.5 w-3.5" /> Recent repositories
-                  </p>
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {recentRepos.map((r) => (
-                      <button
-                        key={`${r.owner}/${r.repo}`}
-                        type="button"
-                        onClick={() => handleOpenRecent(r)}
-                        className="border-border/80 bg-background hover:bg-muted/60 flex cursor-pointer items-center gap-2.5 rounded-lg border p-2.5 text-left transition-colors"
-                      >
-                        <RepoIcon
-                          owner={r.owner}
-                          repo={r.repo}
-                          branch={r.branch}
-                          className="h-5 w-5 shrink-0"
-                          iconClassName="h-full w-full object-contain"
-                          fallbackIcon={
-                            <RepoDeckIcon
-                              size={18}
-                              variant="flat"
-                              className="h-4.5 w-4.5 shrink-0"
-                            />
-                          }
-                        />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-xs font-semibold">
-                            {r.owner}/{r.repo}
-                          </p>
-                          <p className="text-muted-foreground truncate font-mono text-[10px]">
-                            {r.branch}
-                          </p>
-                        </div>
-                        <Badge
-                          variant="outline"
-                          className="ml-1 shrink-0 font-mono text-[9px]"
-                        >
-                          Recent
-                        </Badge>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {/* Sign in Callout */}
               <div className="bg-card flex min-h-0 flex-1 flex-col items-center justify-center p-8 text-center">
                 <div className="bg-primary/10 text-primary mb-3 flex h-11 w-11 items-center justify-center rounded-2xl">
@@ -298,9 +235,9 @@ export function RepositoryPickerDialog({
                   Sign in for your GitHub repositories
                 </p>
                 <p className="text-muted-foreground mt-1.5 max-w-xs text-xs leading-relaxed">
-                  Browse your own public repositories or connect selected
-                  private repositories securely with granular read-only
-                  permissions.
+                  The cached RepoDeck demo is available without signing in. Sign
+                  in to browse your own public repositories or connect selected
+                  private repositories with read-only access.
                 </p>
                 <div className="mt-5 flex flex-col gap-2 sm:flex-row">
                   <Button

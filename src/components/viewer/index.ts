@@ -5,5 +5,4 @@ export { ViewerTabs } from "./ViewerTabs";
 export { MobileBottomNav } from "./MobileBottomNav";
 export { MobileCodeToolsDrawer } from "./MobileCodeToolsDrawer";
 export { RepositoryPickerDialog } from "./RepositoryPickerDialog";
-export { PublicRepositoryForm } from "./PublicRepositoryForm";
 export { ViewerProvider, useViewer } from "@/hooks/useViewer";

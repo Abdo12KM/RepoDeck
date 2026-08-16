@@ -4,12 +4,12 @@ RepoDeck is designed to read GitHub data without turning the browser into a cred
 
 ## Access control
 
-- Anonymous requests can read only public data that GitHub exposes without authentication.
+- Anonymous requests can read only public data that GitHub exposes without authentication. The public UI routes anonymous visitors to the fixed cached RepoDeck demo rather than offering arbitrary repository URL input.
 - Signed-in access uses GitHub App user authorization rather than a global personal access token.
 - Private access is limited by the repositories selected during GitHub App installation and the permissions granted to the App.
 - The App requires only Metadata: Read-only and Contents: Read-only.
 - The application has no file-write, commit, push, issue, pull-request, or local-execution operation.
-- The public demo reads only the fixed, public RepoDeck snapshot; it does not grant anonymous access to arbitrary or private repositories.
+- The public demo reads only the fixed, public RepoDeck snapshot. It does not grant private access, and the anonymous picker does not expose arbitrary repository selection.
 
 GitHub enforces the repository boundary on each non-demo request. RepoDeck stores installation metadata for lifecycle tracking and a bounded public demo snapshot; it does not create a second content or permission database for user repositories.
 
@@ -54,7 +54,7 @@ Authenticated branches, trees, files, and raw media:
 private, no-store
 ```
 
-The public cache improves arbitrary anonymous browsing, while the fixed demo snapshot avoids repeated anonymous GitHub requests altogether. The demo contains only public RepoDeck source; private responses explicitly opt out of shared caching and are never written to the demo tables.
+The public cache remains available for direct public-read requests, while the fixed demo snapshot avoids repeated anonymous GitHub requests from the public product flow altogether. The demo contains only public RepoDeck source; private responses explicitly opt out of shared caching and are never written to the demo tables.
 
 ## Validation and error handling
 
@@ -87,6 +87,6 @@ Before exposing an environment to users:
 - confirm all callback and Setup URLs exactly match the deployed origin;
 - keep environment secrets out of version control and deployment logs;
 - run migrations from a trusted environment and review generated SQL;
-- test anonymous public access, authenticated access, private access, invalid webhooks, expired sessions, and rate-limit handling.
+- test the fixed anonymous demo, authenticated repository access, private access, invalid webhooks, expired sessions, and rate-limit handling.
 
 This page documents the current implementation. It does not replace provider configuration review, secret-rotation procedures, or an organization’s broader security policy.

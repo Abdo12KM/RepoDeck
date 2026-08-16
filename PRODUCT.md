@@ -10,9 +10,9 @@ Developers, maintainers, reviewers, students, and curious readers who need to in
 
 ## Product Purpose
 
-RepoDeck is a focused, read-only GitHub repository viewer. A visitor can paste a public repository URL and open its branches, folders, files, Markdown, images, and shareable URL state. Signed-in users can browse their accessible repositories and connect selected private repositories through a GitHub App with repository-level read-only permissions.
+RepoDeck is a focused, read-only GitHub repository viewer. The anonymous path opens a fixed, cached RepoDeck demo so visitors can read a complete real codebase without spending the shared GitHub request budget. Signed-in users can browse their accessible repositories and connect selected private repositories through a GitHub App with repository-level read-only permissions.
 
-The landing page should make the reading task feel immediate, show the viewer doing real work, and make the access boundary clear. Its primary action is opening a repository.
+The landing page should make the reading task feel immediate, point to the real demo viewer, and make the access boundary clear. Its primary action is opening the cached demo; its secondary action is signing in to browse the user’s repositories.
 
 ## Brand Personality
 
@@ -27,7 +27,7 @@ Quiet, precise, and useful. The experience should feel like a well-made reading 
 
 ## Design Principles
 
-- Put a repository in view early. The product should demonstrate its mechanism before explaining every feature.
+- Put the real demo route one click away. The product should demonstrate its mechanism before explaining every feature.
 - Treat code as content. File paths, branches, snippets, and deep links are the visual material of the page.
 - Keep the boundary honest. Read-only access, no local clone, request-scoped GitHub access, and URL-addressable state are trust signals, not decoration.
 - Prefer a few distinct moments over a long inventory. Each section should answer a different visitor question.

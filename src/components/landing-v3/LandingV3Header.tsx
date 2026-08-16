@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { REPODECK_DEMO_ROUTE, REPODECK_GITHUB_URL } from "./landing-v3-demo";
 
 const NAV_LINKS = [
-  { label: "RepoDeck demo", href: "#reader-preview" },
   { label: "Syntax Studio", href: "#syntax-studio" },
   { label: "Access", href: "#security" },
   { label: "FAQ", href: "#faq" },

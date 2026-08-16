@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   FolderGit2,
@@ -27,6 +26,7 @@ import { RepoIcon } from "@/components/repo/RepoIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppearanceSettings } from "@/hooks/useAppearanceSettings";
 import { useModifierKey } from "@/hooks/useModifierKey";
+import { useIsTouchDevice } from "@/hooks/useTouchDevice";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -61,6 +61,7 @@ export function ViewerHeader({
   const { authenticated, user, isLoading, signIn, signOut } = useAuth();
   const { settings } = useAppearanceSettings();
   const modifier = useModifierKey();
+  const isTouchDevice = useIsTouchDevice();
 
   return (
     <>
@@ -290,7 +291,7 @@ export function ViewerHeader({
                     </Kbd>
                   </DropdownMenuItem>
 
-                  {onOpenShortcutsHelp && (
+                  {onOpenShortcutsHelp && !isTouchDevice && (
                     <DropdownMenuItem
                       onClick={onOpenShortcutsHelp}
                       className="flex cursor-pointer items-center justify-between gap-2 rounded-md px-2.5 py-2"

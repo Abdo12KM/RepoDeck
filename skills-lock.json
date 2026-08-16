@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "skills": {
+    "anti-ui-slop": {
+      "source": "uizze.com",
+      "sourceUrl": "https://uizze.com/",
+      "sourceType": "well-known",
+      "computedHash": "84e84ab2044d5c7f6e5391ad32b4ad3e6ccaac12df84e4bda5e164a67e24e847",
+      "wellKnownDigest": "sha256:1ee631545edf8384f977f96e7c399dd056129ceb49fe4093e96ba033012ac0a8"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "602f846e52164cb1a799d75028b20e57d5fb983e2668eed9bb59a8d35d9ab856"
+    },
+    "landing-page-conversion-audit": {
+      "source": "autonnel/autonnel-skills",
+      "sourceType": "github",
+      "skillPath": "landing-page-conversion-audit/SKILL.md",
+      "computedHash": "2ad7ffa8e37354acab4d2d9c5f27a327ef6d24787392589f4969edf1162d6ea5"
+    },
+    "product-marketing": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/product-marketing/SKILL.md",
+      "computedHash": "709145cb3cd36bab03d5dfe4ecd41af3120ed5a9d293c7ba9d7d9648c39f34b9"
+    },
+    "sales-funnel-blueprint": {
+      "source": "autonnel/autonnel-skills",
+      "sourceType": "github",
+      "skillPath": "sales-funnel-blueprint/SKILL.md",
+      "computedHash": "639105b49161474b66f45318513f0935a0629c091366942bbed54dc1fbdaf52b"
+    },
+    "ui-design": {
+      "source": "uizze.com",
+      "sourceUrl": "https://uizze.com/",
+      "sourceType": "well-known",
+      "computedHash": "81a293cfc820db950e6dd2e10aac7f78890e69b85e5c4a4580db67e7ced03abd",
+      "wellKnownDigest": "sha256:90f48eadee56cbce4ce06afb8d3a382b4ad92633f403c03b0d9d480722247b75"
+    },
+    "ui-radar": {
+      "source": "uizze.com",
+      "sourceUrl": "https://uizze.com/",
+      "sourceType": "well-known",
+      "computedHash": "611409579c5bd37af2b648692c47d22174e9ef74f960ee0b398b5c806e0e16a9",
+      "wellKnownDigest": "sha256:ded107fea8ecd5744583064b3331c808dc7b9d98be570d206c74944e7ae8f1b7"
+    },
+    "ui-slop-score": {
+      "source": "uizze.com",
+      "sourceUrl": "https://uizze.com/",
+      "sourceType": "well-known",
+      "computedHash": "88f396b20e5e44af95ef0767c8c2b69dc167941d035b0fb4066e6d78d85ce867",
+      "wellKnownDigest": "sha256:39e567495a2d3e05715cfe471c8203a959f2288e6d90e229b5ba73e35b433565"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "d1de8ff8d228cd4204bf06eb959ef4317d5b927908d9f42765971e33e80c8a7e"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+    }
+  }
+}

@@ -1,0 +1,503 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-xs: calc(var(--radius) * 0.5);
+  --radius-sm: calc(var(--radius) * 0.75);
+  --radius-md: calc(var(--radius) * 0.85);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.35);
+  --radius-2xl: calc(var(--radius) * 1.75);
+  --radius-3xl: calc(var(--radius) * 2.25);
+  --radius-4xl: calc(var(--radius) * 3);
+}
+
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.59 0.14 242);
+  --primary-foreground: oklch(0.98 0.01 237);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.705 0.015 286.067);
+  --chart-1: oklch(0.83 0.1 230);
+  --chart-2: oklch(0.75 0.14 233);
+  --chart-3: oklch(0.68 0.15 237);
+  --chart-4: oklch(0.59 0.14 242);
+  --chart-5: oklch(0.5 0.12 243);
+  --radius: 0rem;
+  --code-bg: transparent;
+  --code-keyword: #d73a49;
+  --code-function: #6f42c1;
+  --code-string: #032f62;
+  --code-comment: #6a737d;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.59 0.14 242);
+  --sidebar-primary-foreground: oklch(0.98 0.01 237);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.705 0.015 286.067);
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.68 0.15 237);
+  --primary-foreground: oklch(0.29 0.06 243);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.552 0.016 285.938);
+  --chart-1: oklch(0.83 0.1 230);
+  --chart-2: oklch(0.75 0.14 233);
+  --chart-3: oklch(0.68 0.15 237);
+  --chart-4: oklch(0.59 0.14 242);
+  --chart-5: oklch(0.5 0.12 243);
+  --code-bg: #24292e;
+  --code-keyword: #f97583;
+  --code-function: #b392f0;
+  --code-string: #9ecbff;
+  --code-comment: #6a737d;
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.75 0.14 233);
+  --sidebar-primary-foreground: oklch(0.29 0.06 243);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Global Default Scrollbar - Sleek 8px rounded pill */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  *:hover::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklch, var(--foreground) 25%, var(--border));
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  /* Remove Windows / WebKit default up/down/left/right arrow stepper buttons */
+  *::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Firefox custom scrollbar styling */
+  @supports (-moz-appearance: none) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+  }
+}
+
+@layer utilities {
+  /* Fast touch interactions on mobile without tap delays */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Checkerboard pattern for transparent image previews */
+  .bg-checkerboard {
+    background-image:
+      linear-gradient(45deg, var(--muted) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--muted) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--muted) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--muted) 75%);
+    background-size: 16px 16px;
+    background-position:
+      0 0,
+      0 8px,
+      8px -8px,
+      -8px 0px;
+  }
+
+  /* Shiki Code Styling & Line Numbering */
+  .code-viewer-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  .code-viewer-container pre {
+    margin: 0;
+    padding: 0.75rem 0.5rem 1rem 0.25rem;
+    font-family:
+      var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      monospace;
+    flex: 1;
+    min-height: 100%;
+    width: 100%;
+    background-color: transparent !important;
+  }
+
+  @media (min-width: 640px) {
+    .code-viewer-container pre {
+      padding: 0.75rem 0.75rem 1rem 0.375rem;
+    }
+  }
+
+  .code-viewer-container pre code {
+    display: grid;
+    min-width: 100%;
+  }
+
+  .code-viewer-container.has-line-numbers pre code {
+    counter-reset: line;
+  }
+
+  .code-viewer-container .line {
+    display: inline-block;
+    width: 100%;
+    min-height: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .code-viewer-container.has-line-numbers .line {
+    padding-left: 2rem;
+    text-indent: -2rem;
+  }
+
+  .code-viewer-container.code-wrap.has-line-numbers .line {
+    padding-left: calc(2rem + var(--indent, 0ch));
+    text-indent: calc(-2rem - var(--indent, 0ch));
+  }
+
+  .code-viewer-container.code-wrap:not(.has-line-numbers) .line {
+    padding-left: var(--indent, 0ch);
+    text-indent: calc(-1 * var(--indent, 0ch));
+  }
+
+  .code-viewer-container.has-line-numbers .line::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 1.5rem;
+    padding-right: 0.45rem;
+    text-align: right;
+    color: var(--muted-foreground);
+    opacity: 0.4;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+    text-indent: 0;
+  }
+
+  @media (min-width: 640px) {
+    .code-viewer-container.has-line-numbers .line {
+      padding-left: 2.35rem;
+      text-indent: -2.35rem;
+    }
+    .code-viewer-container.code-wrap.has-line-numbers .line {
+      padding-left: calc(2.35rem + var(--indent, 0ch));
+      text-indent: calc(-2.35rem - var(--indent, 0ch));
+    }
+    .code-viewer-container.has-line-numbers .line::before {
+      width: 1.85rem;
+      padding-right: 0.5rem;
+    }
+  }
+
+  .code-viewer-container.code-wrap pre,
+  .code-viewer-container.code-wrap code,
+  .code-viewer-container.code-wrap .line {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .code-viewer-container.code-nowrap pre,
+  .code-viewer-container.code-nowrap code,
+  .code-viewer-container.code-nowrap .line {
+    white-space: pre !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+
+  /* Tree indentation vertical guides */
+  .tree-guide-indent {
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--border) 0px,
+      var(--border) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+  }
+
+  /* Custom scrollbar styling - uses overlay so it doesn't take space from content */
+  .scrollbar-styled {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    transition: scrollbar-color 0.2s ease-in-out;
+  }
+  .scrollbar-styled:hover {
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+  .scrollbar-styled::-webkit-scrollbar,
+  textarea.scrollbar-styled::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-styled::-webkit-scrollbar-track,
+  textarea.scrollbar-styled::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-styled::-webkit-scrollbar-thumb,
+  textarea.scrollbar-styled::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .scrollbar-styled:hover::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklch, var(--foreground) 25%, var(--border));
+  }
+  .scrollbar-styled::-webkit-scrollbar-thumb:hover,
+  textarea.scrollbar-styled::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+
+  /* Tree and sidebar scrollbar styling */
+  .scrollbar-tree {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    transition: scrollbar-color 0.2s ease-in-out;
+  }
+  .scrollbar-tree:hover {
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+  .scrollbar-tree::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-tree::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-tree::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .scrollbar-tree:hover::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklch, var(--foreground) 25%, var(--border));
+  }
+  .scrollbar-tree::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar,
+  .scrollbar-none {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  .no-scrollbar::-webkit-scrollbar,
+  .scrollbar-none::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Touch / Coarse pointer utilities for cleaner responsive interfaces */
+  @media (pointer: coarse), (hover: none) {
+    .touch-hidden {
+      display: none !important;
+    }
+  }
+
+  @media (pointer: fine) and (hover: hover) {
+    .touch-only {
+      display: none !important;
+    }
+  }
+
+  /* Theme-aware Code Loading Shimmer Animation */
+  @keyframes code-shimmer-sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(250%);
+    }
+  }
+
+  .animate-code-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .animate-code-shimmer::after {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 15%,
+      rgba(255, 255, 255, 0.22) 50%,
+      rgba(255, 255, 255, 0.03) 85%,
+      transparent 100%
+    );
+    animation: code-shimmer-sweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    content: "";
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  :root:not(.dark) .animate-code-shimmer::after {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.25) 15%,
+      rgba(255, 255, 255, 0.75) 50%,
+      rgba(255, 255, 255, 0.25) 85%,
+      transparent 100%
+    );
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes border-beam {
+    0% {
+      offset-distance: 0%;
+    }
+    100% {
+      offset-distance: 100%;
+    }
+  }
+
+  @keyframes shiny-text {
+    0%,
+    90%,
+    100% {
+      background-position: calc(-100% - var(--shiny-width)) 0;
+    }
+    30%,
+    60% {
+      background-position: calc(100% + var(--shiny-width)) 0;
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee var(--duration) linear infinite;
+  }
+
+  .animate-marquee-vertical {
+    animation: marquee-vertical var(--duration) linear infinite;
+  }
+
+  .animate-border-beam {
+    animation: border-beam calc(var(--duration) * 1s) infinite linear;
+  }
+
+  .animate-shiny-text {
+    animation: shiny-text 8s infinite;
+  }
+}

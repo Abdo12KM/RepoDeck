@@ -2,13 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  GitBranch,
-  Sparkles,
-  Clock,
-  Search,
-  ExternalLink,
-} from "lucide-react";
+import { GitBranch, Sparkles, Clock, Search, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Kbd } from "@/components/ui/kbd";
@@ -769,25 +763,32 @@ function EmptyRepositoryState({
               RepoDeck Workspace
             </h2>
             <p className="text-muted-foreground mx-auto mt-1.5 max-w-sm text-xs leading-relaxed">
-              Open the cached RepoDeck demo, or sign in to browse your GitHub
-              repositories with studio-grade highlighting.
+              {authenticated
+                ? "Choose a repository from your GitHub account to read with studio-grade highlighting."
+                : "Open the cached RepoDeck demo, or sign in to browse your GitHub repositories with studio-grade highlighting."}
             </p>
           </div>
         </div>
 
         {/* Quick Action Triggers */}
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <Button
-            asChild
-            size="sm"
-            variant="outline"
-            className="h-9 cursor-pointer gap-2.5 px-4 text-xs font-semibold"
-          >
-            <a href="/repositories?owner=Abdo12KM&repo=repodeck&ref=main">
-              <RepoDeckIcon size={18} variant="flat" className="h-4.5 w-4.5" />
-              <span>Open RepoDeck demo</span>
-            </a>
-          </Button>
+          {!authenticated && (
+            <Button
+              asChild
+              size="sm"
+              variant="outline"
+              className="h-9 cursor-pointer gap-2.5 px-4 text-xs font-semibold"
+            >
+              <a href="/repositories?owner=Abdo12KM&repo=repodeck&ref=main">
+                <RepoDeckIcon
+                  size={18}
+                  variant="flat"
+                  className="h-4.5 w-4.5"
+                />
+                <span>Open RepoDeck demo</span>
+              </a>
+            </Button>
+          )}
 
           <Button
             onClick={onChoose}

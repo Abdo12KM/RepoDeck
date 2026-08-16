@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   FolderGit2,
@@ -15,6 +16,7 @@ import {
   Search,
   ExternalLink,
   Command,
+  Settings2,
 } from "lucide-react";
 import { RepoDeckIcon } from "@/components/ui/RepoDeckLogo";
 import { Button } from "@/components/ui/button";
@@ -62,6 +64,14 @@ export function ViewerHeader({
   const { settings } = useAppearanceSettings();
   const modifier = useModifierKey();
   const isTouchDevice = useIsTouchDevice();
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const switchingRepositoryRef = useRef(false);
+
+  const handleSwitchRepository = () => {
+    switchingRepositoryRef.current = true;
+    setAccountMenuOpen(false);
+    window.setTimeout(onOpenRepository, 150);
+  };
 
   return (
     <>
@@ -197,7 +207,10 @@ export function ViewerHeader({
           {/* User Auth Dropdown */}
           {!isLoading &&
             (authenticated && user ? (
-              <DropdownMenu>
+              <DropdownMenu
+                open={accountMenuOpen}
+                onOpenChange={setAccountMenuOpen}
+              >
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
@@ -219,6 +232,12 @@ export function ViewerHeader({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
+                  onCloseAutoFocus={(event) => {
+                    if (switchingRepositoryRef.current) {
+                      event.preventDefault();
+                      switchingRepositoryRef.current = false;
+                    }
+                  }}
                   className="border-border/80 bg-popover w-64 p-1.5 text-xs shadow-xl"
                 >
                   {/* User Profile Header Card */}
@@ -244,7 +263,7 @@ export function ViewerHeader({
 
                   {/* Menu Items */}
                   <DropdownMenuItem
-                    onClick={onOpenRepository}
+                    onSelect={handleSwitchRepository}
                     className="flex cursor-pointer items-center justify-between gap-2 rounded-md px-2.5 py-2"
                   >
                     <div className="flex items-center gap-2.5">
@@ -336,15 +355,80 @@ export function ViewerHeader({
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button
-                variant="ghost"
-                className="text-muted-foreground hover:text-foreground h-8.5 gap-1.5 px-2 text-xs"
-                style={{ borderRadius: `${settings.radius}rem` }}
-                onClick={() => signIn()}
-              >
-                <LogIn className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Sign in</span>
-              </Button>
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-foreground h-8.5 w-8.5 cursor-pointer"
+                      style={{ borderRadius: `${settings.radius}rem` }}
+                      aria-label="Open viewer menu"
+                      title="Viewer menu"
+                    >
+                      <Settings2 className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="border-border/80 bg-popover w-64 p-1.5 text-xs shadow-xl"
+                  >
+                    <DropdownMenuItem
+                      onClick={
+                        onOpenAppearance ||
+                        (() =>
+                          window.dispatchEvent(
+                            new CustomEvent("repodeck:toggle-appearance"),
+                          ))
+                      }
+                      className="flex cursor-pointer items-center justify-between gap-2 rounded-md px-2.5 py-2"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Paintbrush className="text-muted-foreground h-4 w-4 shrink-0" />
+                        <span>Appearance & Theme</span>
+                      </div>
+                      <Kbd className="bg-muted text-muted-foreground font-mono text-[10px]">
+                        {modifier},
+                      </Kbd>
+                    </DropdownMenuItem>
+
+                    {onOpenShortcutsHelp && !isTouchDevice && (
+                      <DropdownMenuItem
+                        onClick={onOpenShortcutsHelp}
+                        className="flex cursor-pointer items-center justify-between gap-2 rounded-md px-2.5 py-2"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Command className="text-muted-foreground h-4 w-4 shrink-0" />
+                          <span>Keyboard shortcuts</span>
+                        </div>
+                        <Kbd className="bg-muted text-muted-foreground font-mono text-[10px]">
+                          ?
+                        </Kbd>
+                      </DropdownMenuItem>
+                    )}
+
+                    <DropdownMenuSeparator className="my-1" />
+
+                    <DropdownMenuItem
+                      onClick={() => signIn()}
+                      className="flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2"
+                    >
+                      <LogIn className="text-muted-foreground h-4 w-4 shrink-0" />
+                      <span>Sign in with GitHub</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <Button
+                  variant="ghost"
+                  className="text-muted-foreground hover:text-foreground h-8.5 gap-1.5 px-2 text-xs"
+                  style={{ borderRadius: `${settings.radius}rem` }}
+                  onClick={() => signIn()}
+                >
+                  <LogIn className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Sign in</span>
+                </Button>
+              </>
             ))}
         </div>
       </header>

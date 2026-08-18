@@ -714,47 +714,66 @@ export function AppearanceSettingsDialog({
                   )}
                 </div>
 
-                {/* Transparent Background Override Toggle */}
+                {/* Canvas Background Mode Tab Switcher */}
                 <div
-                  className="border-border/80 bg-card flex items-center justify-between border p-3.5 shadow-2xs"
+                  className="border-border/80 bg-card flex flex-col gap-2.5 border p-3.5 shadow-2xs sm:flex-row sm:items-center sm:justify-between"
                   style={{ borderRadius: `${settings.radius}rem` }}
                 >
-                  <div className="max-w-[75%] space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-foreground text-xs font-semibold">
-                        Match App Background
-                      </span>
-                      <Badge
-                        variant={
-                          settings.transparentCodeBg ? "default" : "outline"
-                        }
-                        className="px-1.5 py-0 font-mono text-[9px]"
-                      >
-                        {settings.transparentCodeBg
-                          ? "Transparent ON"
-                          : "Theme Background"}
-                      </Badge>
-                    </div>
-                    <p className="text-muted-foreground text-[11px]">
-                      When enabled, the code canvas uses the app neutral
-                      background instead of the theme&apos;s custom editor
-                      background.
+                  <div className="space-y-0.5 sm:max-w-[65%]">
+                    <span className="text-foreground text-xs font-semibold">
+                      Canvas Background
+                    </span>
+                    <p className="text-muted-foreground text-[11px] leading-relaxed">
+                      Use the theme&apos;s authentic editor background or match
+                      the app canvas.
                     </p>
                   </div>
 
-                  <Button
-                    type="button"
-                    variant={settings.transparentCodeBg ? "default" : "outline"}
-                    size="sm"
-                    onClick={() =>
-                      updateSettings({
-                        transparentCodeBg: !settings.transparentCodeBg,
-                      })
-                    }
-                    className="h-8 shrink-0 cursor-pointer px-3 text-xs font-semibold"
+                  <div
+                    role="tablist"
+                    aria-label="Code canvas background mode"
+                    className="bg-muted/40 border-border/80 grid h-8.5 w-full grid-cols-2 items-center border p-0.5 shadow-2xs sm:flex sm:h-8 sm:w-auto sm:shrink-0"
+                    style={{ borderRadius: `${settings.radius}rem` }}
                   >
-                    {settings.transparentCodeBg ? "Transparent" : "Authentic"}
-                  </Button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={!settings.transparentCodeBg}
+                      onClick={() =>
+                        updateSettings({ transparentCodeBg: false })
+                      }
+                      className={cn(
+                        "flex h-full cursor-pointer items-center justify-center px-3 text-xs font-medium transition-all",
+                        !settings.transparentCodeBg
+                          ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                      style={{
+                        borderRadius: `calc(${settings.radius}rem - 2px)`,
+                      }}
+                    >
+                      Authentic
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={settings.transparentCodeBg}
+                      onClick={() =>
+                        updateSettings({ transparentCodeBg: true })
+                      }
+                      className={cn(
+                        "flex h-full cursor-pointer items-center justify-center px-3 text-xs font-medium transition-all",
+                        settings.transparentCodeBg
+                          ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                      style={{
+                        borderRadius: `calc(${settings.radius}rem - 2px)`,
+                      }}
+                    >
+                      Match App
+                    </button>
+                  </div>
                 </div>
 
                 {filteredCodeThemes.length === 0 ? (

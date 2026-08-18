@@ -6,7 +6,7 @@ RepoDeck is a Next.js App Router application with a responsive repository worksp
 
 | Page          | Responsibility                                                                                                                   |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| /             | Landing page, fixed public demo launch, feature explanation, theme showcase, FAQ, and links into the viewer.                  |
+| /             | Landing page, fixed public demo launch, feature explanation, theme showcase, FAQ, and links into the viewer.                     |
 | /repositories | Repository picker, branch selection, file tree, file tabs, code viewer, Markdown preview, image viewer, and appearance controls. |
 
 The viewer stores navigation state in the URL:
@@ -40,12 +40,12 @@ Credentials and GitHub App secrets remain on the server. The browser receives on
 
 ## Access modes
 
-| Mode                 | Authentication                                       | What it can read                                            | Cache policy                                      |
-| -------------------- | ---------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
-| RepoDeck demo        | Anonymous; fixed public snapshot                     | The public `Abdo12KM/repodeck` snapshot on `main`           | Dedicated Postgres snapshot                      |
-| Direct public read   | Anonymous GitHub API request reached through URL state | Repositories GitHub exposes publicly                      | Short shared cache for branches, trees, and files |
-| Signed in            | GitHub App user authorization                        | Repositories available to that authorization                | Private, no-store responses                       |
-| Private installation | Signed-in user plus selected GitHub App installation | Private repositories allowed by GitHub for the installation | Private, no-store responses                       |
+| Mode                 | Authentication                                         | What it can read                                            | Cache policy                                      |
+| -------------------- | ------------------------------------------------------ | ----------------------------------------------------------- | ------------------------------------------------- |
+| RepoDeck demo        | Anonymous; fixed public snapshot                       | The public `Abdo12KM/repodeck` snapshot on `main`           | Dedicated Postgres snapshot                       |
+| Direct public read   | Anonymous GitHub API request reached through URL state | Repositories GitHub exposes publicly                        | Short shared cache for branches, trees, and files |
+| Signed in            | GitHub App user authorization                          | Repositories available to that authorization                | Private, no-store responses                       |
+| Private installation | Signed-in user plus selected GitHub App installation   | Private repositories allowed by GitHub for the installation | Private, no-store responses                       |
 
 GitHub enforces the repository boundary on every non-demo API request. The anonymous product entry point is intentionally limited to one public repository snapshot; signed-in users use the authenticated picker for their own repositories. The demo cache never expands to arbitrary or private repositories.
 

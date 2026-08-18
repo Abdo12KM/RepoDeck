@@ -134,7 +134,24 @@ export function OptionWheel({
       soundUrl,
       soundVolume,
     };
-  }, [onChange, items, fontSize, spacing, remPx, curve, tilt, blur, fade, minOpacity, side, loop, smoothing, draggable, soundUrl, soundVolume]);
+  }, [
+    onChange,
+    items,
+    fontSize,
+    spacing,
+    remPx,
+    curve,
+    tilt,
+    blur,
+    fade,
+    minOpacity,
+    side,
+    loop,
+    smoothing,
+    draggable,
+    soundUrl,
+    soundVolume,
+  ]);
 
   const runFrameRef = useRef<(now: number) => void>(() => {});
 
@@ -185,7 +202,9 @@ export function OptionWheel({
       );
     }
 
-    rafRef.current = settled ? null : requestAnimationFrame((t) => runFrameRef.current(t));
+    rafRef.current = settled
+      ? null
+      : requestAnimationFrame((t) => runFrameRef.current(t));
   }, []);
 
   useEffect(() => {
@@ -350,7 +369,7 @@ export function OptionWheel({
       role="listbox"
       tabIndex={0}
       aria-label="Option wheel"
-      className={`option-wheel${side === "right" ? " option-wheel--right" : ""}${isDragging ? " option-wheel--dragging" : ""}${className ? ` ${className}` : ""}`}
+      className={`option-wheel${side === "right" ? "option-wheel--right" : ""}${isDragging ? "option-wheel--dragging" : ""}${className ? ` ${className}` : ""}`}
       style={
         {
           "--ow-text-color": textColor,
@@ -373,7 +392,7 @@ export function OptionWheel({
           }}
           role="option"
           aria-selected={selectedIndex === index}
-          className={`option-wheel__item${selectedIndex === index ? " option-wheel__item--selected" : ""}`}
+          className={`option-wheel__item${selectedIndex === index ? "option-wheel__item--selected" : ""}`}
           onClick={() => handleItemClick(index)}
         >
           {label}

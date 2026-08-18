@@ -21,8 +21,8 @@ export const AnimatedShinyText: FC<AnimatedShinyTextProps> = ({
       }
       className={cn(
         "text-muted-foreground/80 inline-block",
-        "animate-shiny-text bg-clip-text bg-no-repeat [background-position:0_0] [background-size:var(--shiny-width)_100%]",
-        "bg-gradient-to-r from-transparent via-foreground via-50% to-transparent",
+        "animate-shiny-text [background-size:var(--shiny-width)_100%] bg-clip-text [background-position:0_0] bg-no-repeat",
+        "via-foreground bg-gradient-to-r from-transparent via-50% to-transparent",
         className,
       )}
     >

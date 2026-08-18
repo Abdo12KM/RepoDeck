@@ -48,7 +48,11 @@ export function LandingV2Header() {
 
         <div className={styles.navActions}>
           {!isLoading && !authenticated ? (
-            <button type="button" className={styles.textButton} onClick={() => signIn()}>
+            <button
+              type="button"
+              className={styles.textButton}
+              onClick={() => signIn()}
+            >
               Sign in
             </button>
           ) : null}
@@ -61,10 +65,16 @@ export function LandingV2Header() {
             className={styles.menuButton}
             aria-expanded={menuOpen}
             aria-controls="landing-mobile-nav"
-            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={
+              menuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
             onClick={() => setMenuOpen((open) => !open)}
           >
-            {menuOpen ? <X aria-hidden="true" size={20} /> : <Menu aria-hidden="true" size={20} />}
+            {menuOpen ? (
+              <X aria-hidden="true" size={20} />
+            ) : (
+              <Menu aria-hidden="true" size={20} />
+            )}
           </button>
         </div>
       </div>
@@ -73,7 +83,12 @@ export function LandingV2Header() {
         <div id="landing-mobile-nav" className={styles.mobileNav}>
           <nav aria-label="Mobile landing page">
             {NAV_LINKS.map((link) => (
-              <a key={link.href} href={link.href} className={styles.mobileNavLink} onClick={closeMenu}>
+              <a
+                key={link.href}
+                href={link.href}
+                className={styles.mobileNavLink}
+                onClick={closeMenu}
+              >
                 {link.label}
               </a>
             ))}
@@ -81,12 +96,23 @@ export function LandingV2Header() {
           <div className={styles.mobileNavRule} />
           <div className={styles.mobileNavActions}>
             {!isLoading && !authenticated ? (
-              <button type="button" className={styles.mobileSecondaryButton} onClick={() => { closeMenu(); signIn(); }}>
+              <button
+                type="button"
+                className={styles.mobileSecondaryButton}
+                onClick={() => {
+                  closeMenu();
+                  signIn();
+                }}
+              >
                 <Github aria-hidden="true" size={16} />
                 Sign in with GitHub
               </button>
             ) : null}
-            <Link href="/repositories" className={styles.mobilePrimaryButton} onClick={closeMenu}>
+            <Link
+              href="/repositories"
+              className={styles.mobilePrimaryButton}
+              onClick={closeMenu}
+            >
               Open repository viewer
               <ArrowUpRight aria-hidden="true" size={16} />
             </Link>

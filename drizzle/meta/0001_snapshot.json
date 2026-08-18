@@ -59,12 +59,8 @@
           "name": "github_accounts_user_id_users_id_fk",
           "tableFrom": "github_accounts",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -149,12 +145,8 @@
           "name": "github_installations_connected_by_user_id_users_id_fk",
           "tableFrom": "github_installations",
           "tableTo": "users",
-          "columnsFrom": [
-            "connected_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["connected_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -213,11 +205,7 @@
       "compositePrimaryKeys": {
         "github_repository_caches_owner_repo_ref_pk": {
           "name": "github_repository_caches_owner_repo_ref_pk",
-          "columns": [
-            "owner",
-            "repo",
-            "ref"
-          ]
+          "columns": ["owner", "repo", "ref"]
         }
       },
       "uniqueConstraints": {},
@@ -304,12 +292,7 @@
       "compositePrimaryKeys": {
         "github_repository_files_owner_repo_ref_path_pk": {
           "name": "github_repository_files_owner_repo_ref_path_pk",
-          "columns": [
-            "owner",
-            "repo",
-            "ref",
-            "path"
-          ]
+          "columns": ["owner", "repo", "ref", "path"]
         }
       },
       "uniqueConstraints": {},
@@ -373,9 +356,7 @@
         "users_github_id_unique": {
           "name": "users_github_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "github_id"
-          ]
+          "columns": ["github_id"]
         }
       },
       "policies": {},

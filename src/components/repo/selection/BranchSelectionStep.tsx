@@ -44,7 +44,7 @@ export function BranchSelectionStep({
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-muted-foreground hover:text-foreground -ml-1.5 h-7 gap-1 px-2 text-xs font-medium cursor-pointer"
+                className="text-muted-foreground hover:text-foreground -ml-1.5 h-7 cursor-pointer gap-1 px-2 text-xs font-medium"
                 onClick={onBack}
                 title="Back to repositories"
                 aria-label="Back to repositories"
@@ -52,7 +52,9 @@ export function BranchSelectionStep({
                 <ChevronLeft className="h-3.5 w-3.5" />
                 <span>Repositories</span>
               </Button>
-            ) : <div />}
+            ) : (
+              <div />
+            )}
             {onClose && (
               <Button
                 variant="ghost"

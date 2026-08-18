@@ -30,7 +30,7 @@ export function RotatingText({
   return (
     <span
       className={cn(
-        "inline-flex relative items-center justify-center overflow-hidden align-baseline font-extrabold",
+        "relative inline-flex items-center justify-center overflow-hidden align-baseline font-extrabold",
         className,
       )}
     >

@@ -163,18 +163,18 @@ The primary page is a calm, dark product surface rather than an anonymous reposi
 
 The following checks were run after the implementation:
 
-| Check | Result |
-| --- | --- |
-| `pnpm typecheck` | Passed |
-| `pnpm lint` | Passed with 0 errors; existing warnings are concentrated in skill/tool scripts outside the new route |
-| `pnpm test:run` | 9 test files and 33 tests passed; the existing test environment emitted a non-fatal Canvas API warning |
-| `pnpm build` | Passed; `/` is the primary landing route and `/landing` remains a compatibility redirect |
-| Anti-UI-Slop detector | `[]` for the new route/components |
-| Impeccable detector | `[]` for the new route/components |
-| UI Design detector | `[]` for the new route/components |
-| Browser runtime errors | None after reload; console contained only expected development HMR/React DevTools messages |
-| Accessibility audit | 0 violations |
-| Responsive overflow | `scrollWidth === viewport width` at 390px and 768px |
+| Check                  | Result                                                                                                 |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| `pnpm typecheck`       | Passed                                                                                                 |
+| `pnpm lint`            | Passed with 0 errors; existing warnings are concentrated in skill/tool scripts outside the new route   |
+| `pnpm test:run`        | 9 test files and 33 tests passed; the existing test environment emitted a non-fatal Canvas API warning |
+| `pnpm build`           | Passed; `/` is the primary landing route and `/landing` remains a compatibility redirect               |
+| Anti-UI-Slop detector  | `[]` for the new route/components                                                                      |
+| Impeccable detector    | `[]` for the new route/components                                                                      |
+| UI Design detector     | `[]` for the new route/components                                                                      |
+| Browser runtime errors | None after reload; console contained only expected development HMR/React DevTools messages             |
+| Accessibility audit    | 0 violations                                                                                           |
+| Responsive overflow    | `scrollWidth === viewport width` at 390px and 768px                                                    |
 
 Browser interaction checks included the fixed demo route, README file selection, authenticated repository picker, file controls, and the responsive landing surface. The current anonymous flow intentionally has no arbitrary repository URL input.
 
@@ -301,12 +301,12 @@ interface CodeSearchResponse {
 
 ### Suggested modes
 
-| Mode | Scope | Completeness |
-| --- | --- | --- |
-| Current file | Loaded content only | Exact for the selected file/ref |
-| Default branch | GitHub Code Search + targeted file fetches | Exact within GitHub search behavior and result limits |
-| Selected branch | Server-side bounded blob scan | Exact when the scan completes; explicitly partial otherwise |
-| Indexed repository | Dedicated content index | Fast and broad, but changes the current no-content-storage boundary |
+| Mode               | Scope                                      | Completeness                                                        |
+| ------------------ | ------------------------------------------ | ------------------------------------------------------------------- |
+| Current file       | Loaded content only                        | Exact for the selected file/ref                                     |
+| Default branch     | GitHub Code Search + targeted file fetches | Exact within GitHub search behavior and result limits               |
+| Selected branch    | Server-side bounded blob scan              | Exact when the scan completes; explicitly partial otherwise         |
+| Indexed repository | Dedicated content index                    | Fast and broad, but changes the current no-content-storage boundary |
 
 ## 8. Recommended implementation phases
 

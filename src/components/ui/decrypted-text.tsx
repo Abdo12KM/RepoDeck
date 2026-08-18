@@ -43,7 +43,8 @@ export function DecryptedText({
     const shouldAnimate =
       (animateOn === "hover" && isHovering) ||
       (animateOn === "view" && isScrolledIntoView && !hasAnimated) ||
-      (animateOn === "both" && (isHovering || (isScrolledIntoView && !hasAnimated)));
+      (animateOn === "both" &&
+        (isHovering || (isScrolledIntoView && !hasAnimated)));
 
     if (shouldAnimate) {
       interval = setInterval(() => {
@@ -62,7 +63,9 @@ export function DecryptedText({
 
               if (useOriginalCharsOnly) {
                 const nonSpaceChars = text.replace(/\s/g, "");
-                return nonSpaceChars[Math.floor(Math.random() * nonSpaceChars.length)];
+                return nonSpaceChars[
+                  Math.floor(Math.random() * nonSpaceChars.length)
+                ];
               }
 
               return characters[Math.floor(Math.random() * characters.length)];
@@ -101,7 +104,7 @@ export function DecryptedText({
       ref={containerRef}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      className={cn("inline-block font-mono cursor-default", parentClassName)}
+      className={cn("inline-block cursor-default font-mono", parentClassName)}
     >
       <span className={className}>{displayText}</span>
     </span>

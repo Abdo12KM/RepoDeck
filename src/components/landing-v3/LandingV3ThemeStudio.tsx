@@ -168,7 +168,13 @@ interface Snippet {
   codeLines: {
     num: string;
     text: string;
-    tokenType?: "keyword" | "function" | "string" | "comment" | "type" | "number";
+    tokenType?:
+      | "keyword"
+      | "function"
+      | "string"
+      | "comment"
+      | "type"
+      | "number";
   }[];
 }
 
@@ -319,13 +325,16 @@ const SNIPPETS: Record<string, Snippet> = {
 
 export function LandingV3ThemeStudio() {
   const [selectedThemeId, setSelectedThemeId] = useState("repodeck-clean");
-  const [selectedLang, setSelectedLang] = useState<"typescript" | "rust" | "go" | "python">("typescript");
+  const [selectedLang, setSelectedLang] = useState<
+    "typescript" | "rust" | "go" | "python"
+  >("typescript");
   const [wrapLines, setWrapLines] = useState(false);
   const [showLineNumbers, setShowLineNumbers] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const themeList = Object.values(SHIKI_THEMES);
-  const activeTheme = SHIKI_THEMES[selectedThemeId] || SHIKI_THEMES["repodeck-clean"];
+  const activeTheme =
+    SHIKI_THEMES[selectedThemeId] || SHIKI_THEMES["repodeck-clean"];
   const activeSnippet = SNIPPETS[selectedLang] || SNIPPETS.typescript;
 
   const handleCopy = () => {
@@ -356,28 +365,32 @@ export function LandingV3ThemeStudio() {
   };
 
   return (
-    <section id="syntax-studio" className="relative border-t border-border/40 py-16 sm:py-24">
+    <section
+      id="syntax-studio"
+      className="border-border/40 relative border-t py-16 sm:py-24"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="mx-auto max-w-3xl space-y-3 text-center">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-0.5 text-xs font-medium text-primary">
+          <div className="border-primary/20 bg-primary/5 text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-0.5 text-xs font-medium">
             <Palette className="h-3.5 w-3.5" />
             <span>Studio Syntax Engine</span>
           </div>
 
-          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl [text-wrap:balance]">
+          <h2 className="text-foreground text-2xl font-bold tracking-tight [text-wrap:balance] sm:text-4xl">
             18 Studio-grade Shiki syntax themes.
           </h2>
 
-          <p className="text-sm leading-relaxed text-muted-foreground sm:text-base [text-wrap:pretty]">
-            Read code in the environment you love. Powered by TextMate grammars and Shiki tokens with zero compilation overhead.
+          <p className="text-muted-foreground text-sm leading-relaxed [text-wrap:pretty] sm:text-base">
+            Read code in the environment you love. Powered by TextMate grammars
+            and Shiki tokens with zero compilation overhead.
           </p>
         </div>
 
         {/* Theme Studio Interactive Playground */}
-        <div className="mt-12 overflow-hidden rounded-xl border border-border/80 bg-card shadow-2xl">
+        <div className="border-border/80 bg-card mt-12 overflow-hidden rounded-xl border shadow-2xl">
           {/* Top Bar: Theme Pills Carousel / Grid */}
-          <div className="border-b border-border/60 bg-muted/20 p-3 sm:p-4">
+          <div className="border-border/60 bg-muted/20 border-b p-3 sm:p-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               {/* Theme Selection Chips */}
               <div className="flex flex-wrap items-center gap-1.5">
@@ -389,9 +402,9 @@ export function LandingV3ThemeStudio() {
                       type="button"
                       onClick={() => setSelectedThemeId(theme.id)}
                       className={cn(
-                        "flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all cursor-pointer",
+                        "flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all",
                         isSelected
-                          ? "border-primary bg-primary/15 text-primary shadow-xs font-semibold"
+                          ? "border-primary bg-primary/15 text-primary font-semibold shadow-xs"
                           : "border-border/60 bg-background/60 text-muted-foreground hover:border-border hover:bg-muted/50 hover:text-foreground",
                       )}
                     >
@@ -413,22 +426,24 @@ export function LandingV3ThemeStudio() {
               </div>
 
               {/* Language Switcher Tabs */}
-              <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-background p-1 self-start lg:self-auto">
-                {(["typescript", "rust", "go", "python"] as const).map((lang) => (
-                  <button
-                    key={lang}
-                    type="button"
-                    onClick={() => setSelectedLang(lang)}
-                    className={cn(
-                      "rounded-md px-2.5 py-1 text-xs font-medium capitalize transition-colors cursor-pointer",
-                      selectedLang === lang
-                        ? "bg-primary text-primary-foreground font-semibold"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    {lang}
-                  </button>
-                ))}
+              <div className="border-border/60 bg-background flex items-center gap-1 self-start rounded-lg border p-1 lg:self-auto">
+                {(["typescript", "rust", "go", "python"] as const).map(
+                  (lang) => (
+                    <button
+                      key={lang}
+                      type="button"
+                      onClick={() => setSelectedLang(lang)}
+                      className={cn(
+                        "cursor-pointer rounded-md px-2.5 py-1 text-xs font-medium capitalize transition-colors",
+                        selectedLang === lang
+                          ? "bg-primary text-primary-foreground font-semibold"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {lang}
+                    </button>
+                  ),
+                )}
               </div>
             </div>
           </div>
@@ -451,7 +466,10 @@ export function LandingV3ThemeStudio() {
                   className="h-3.5 w-3.5"
                   style={{ color: activeTheme.tokens.keyword }}
                 />
-                <span style={{ color: activeTheme.foreground }} className="font-semibold">
+                <span
+                  style={{ color: activeTheme.foreground }}
+                  className="font-semibold"
+                >
                   {activeSnippet.filename}
                 </span>
                 <span className="text-muted-foreground/60 hidden sm:inline">
@@ -464,10 +482,14 @@ export function LandingV3ThemeStudio() {
                 <button
                   type="button"
                   onClick={() => setWrapLines(!wrapLines)}
-                  className="flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-mono transition-opacity hover:opacity-80 cursor-pointer"
+                  className="flex cursor-pointer items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] transition-opacity hover:opacity-80"
                   style={{
-                    color: wrapLines ? activeTheme.tokens.keyword : activeTheme.foreground,
-                    backgroundColor: wrapLines ? `${activeTheme.tokens.keyword}22` : "transparent",
+                    color: wrapLines
+                      ? activeTheme.tokens.keyword
+                      : activeTheme.foreground,
+                    backgroundColor: wrapLines
+                      ? `${activeTheme.tokens.keyword}22`
+                      : "transparent",
                   }}
                 >
                   <WrapText className="h-3 w-3" />
@@ -477,10 +499,14 @@ export function LandingV3ThemeStudio() {
                 <button
                   type="button"
                   onClick={() => setShowLineNumbers(!showLineNumbers)}
-                  className="flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-mono transition-opacity hover:opacity-80 cursor-pointer"
+                  className="flex cursor-pointer items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] transition-opacity hover:opacity-80"
                   style={{
-                    color: showLineNumbers ? activeTheme.tokens.type : activeTheme.foreground,
-                    backgroundColor: showLineNumbers ? `${activeTheme.tokens.type}22` : "transparent",
+                    color: showLineNumbers
+                      ? activeTheme.tokens.type
+                      : activeTheme.foreground,
+                    backgroundColor: showLineNumbers
+                      ? `${activeTheme.tokens.type}22`
+                      : "transparent",
                   }}
                 >
                   <ListOrdered className="h-3 w-3" />
@@ -514,7 +540,7 @@ export function LandingV3ThemeStudio() {
             {/* Code Lines Display */}
             <div
               className={cn(
-                "p-4 font-mono text-xs leading-relaxed overflow-x-auto min-h-[260px]",
+                "min-h-[260px] overflow-x-auto p-4 font-mono text-xs leading-relaxed",
                 wrapLines ? "whitespace-pre-wrap" : "whitespace-pre",
               )}
             >
@@ -522,7 +548,7 @@ export function LandingV3ThemeStudio() {
                 <div key={idx} className="flex items-baseline gap-3">
                   {showLineNumbers && (
                     <span
-                      className="w-6 shrink-0 select-none text-right text-[11px] opacity-40 font-mono"
+                      className="w-6 shrink-0 text-right font-mono text-[11px] opacity-40 select-none"
                       style={{ color: activeTheme.foreground }}
                     >
                       {line.num}
@@ -531,7 +557,8 @@ export function LandingV3ThemeStudio() {
                   <span
                     style={{
                       color: getTokenColor(line.tokenType),
-                      fontStyle: line.tokenType === "comment" ? "italic" : "normal",
+                      fontStyle:
+                        line.tokenType === "comment" ? "italic" : "normal",
                     }}
                   >
                     {line.text || " "}
@@ -542,7 +569,7 @@ export function LandingV3ThemeStudio() {
 
             {/* Color Token Swatches Footer Bar */}
             <div
-              className="flex flex-wrap items-center justify-between gap-3 border-t p-3 text-xs font-mono"
+              className="flex flex-wrap items-center justify-between gap-3 border-t p-3 font-mono text-xs"
               style={{
                 borderColor: activeTheme.border,
                 backgroundColor: `${activeTheme.bg}ee`,
@@ -554,21 +581,27 @@ export function LandingV3ThemeStudio() {
                     className="h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: activeTheme.tokens.keyword }}
                   />
-                  <span style={{ color: activeTheme.tokens.keyword }}>Keyword</span>
+                  <span style={{ color: activeTheme.tokens.keyword }}>
+                    Keyword
+                  </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span
                     className="h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: activeTheme.tokens.function }}
                   />
-                  <span style={{ color: activeTheme.tokens.function }}>Function</span>
+                  <span style={{ color: activeTheme.tokens.function }}>
+                    Function
+                  </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span
                     className="h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: activeTheme.tokens.string }}
                   />
-                  <span style={{ color: activeTheme.tokens.string }}>String</span>
+                  <span style={{ color: activeTheme.tokens.string }}>
+                    String
+                  </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span
@@ -582,12 +615,18 @@ export function LandingV3ThemeStudio() {
                     className="h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: activeTheme.tokens.comment }}
                   />
-                  <span style={{ color: activeTheme.tokens.comment }}>Comment</span>
+                  <span style={{ color: activeTheme.tokens.comment }}>
+                    Comment
+                  </span>
                 </div>
               </div>
 
-              <div className="text-[11px] text-muted-foreground">
-                Theme: <strong style={{ color: activeTheme.foreground }}>{activeTheme.name}</strong> by {activeTheme.author}
+              <div className="text-muted-foreground text-[11px]">
+                Theme:{" "}
+                <strong style={{ color: activeTheme.foreground }}>
+                  {activeTheme.name}
+                </strong>{" "}
+                by {activeTheme.author}
               </div>
             </div>
           </div>

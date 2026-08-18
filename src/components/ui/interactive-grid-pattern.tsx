@@ -12,8 +12,7 @@ import { cn } from "@/lib/utils";
  * @param className - The class name of the grid.
  * @param squaresClassName - The class name of the squares.
  */
-export interface InteractiveGridPatternProps
-  extends React.SVGProps<SVGSVGElement> {
+export interface InteractiveGridPatternProps extends React.SVGProps<SVGSVGElement> {
   width?: number;
   height?: number;
   squares?: [number, number]; // [horizontal, vertical]
@@ -43,7 +42,7 @@ export function InteractiveGridPattern({
       viewBox={`0 0 ${totalWidth} ${totalHeight}`}
       preserveAspectRatio="xMidYMin slice"
       className={cn(
-        "absolute inset-0 h-full w-full pointer-events-auto",
+        "pointer-events-auto absolute inset-0 h-full w-full",
         className,
       )}
       {...props}

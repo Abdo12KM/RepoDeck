@@ -293,7 +293,9 @@ export function WebThreads({
       uMouse[0] = currentMouse[0];
       uMouse[1] = currentMouse[1];
       program.uniforms.uMouseActive.value = currentActive;
-      program.uniforms.uEnableMouse.value = mouseRef.current.enabled ? 1.0 : 0.0;
+      program.uniforms.uEnableMouse.value = mouseRef.current.enabled
+        ? 1.0
+        : 0.0;
       program.uniforms.uMouseStrength.value = mouseRef.current.strength;
       renderer.render({ scene: mesh });
       raf = requestAnimationFrame(loop);

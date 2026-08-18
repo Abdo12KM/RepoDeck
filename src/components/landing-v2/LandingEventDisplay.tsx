@@ -33,7 +33,7 @@ const FILE_SIGNALS: FileSignal[] = [
       "const { owner, repo, branch } = useViewer();",
       "",
       "return (",
-      "  <div className=\"flex h-full w-full\">",
+      '  <div className="flex h-full w-full">',
       "    <ViewerTreePanel />",
       "    <CodeFileViewer branch={branch} />",
       "  </div>",
@@ -81,7 +81,8 @@ export function LandingEventDisplay() {
   const [activeId, setActiveId] = useState("viewer");
   const [filesOpen, setFilesOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const activeFile = FILE_SIGNALS.find((file) => file.id === activeId) ?? FILE_SIGNALS[0];
+  const activeFile =
+    FILE_SIGNALS.find((file) => file.id === activeId) ?? FILE_SIGNALS[0];
 
   const selectFile = (id: string) => {
     setActiveId(id);
@@ -126,7 +127,11 @@ export function LandingEventDisplay() {
           <Folder aria-hidden="true" size={15} />
           File map
         </span>
-        {filesOpen ? <ChevronDown aria-hidden="true" size={15} /> : <ChevronRight aria-hidden="true" size={15} />}
+        {filesOpen ? (
+          <ChevronDown aria-hidden="true" size={15} />
+        ) : (
+          <ChevronRight aria-hidden="true" size={15} />
+        )}
       </button>
 
       {filesOpen ? (
@@ -145,7 +150,9 @@ export function LandingEventDisplay() {
             >
               <FileGlyph kind={file.kind} />
               <span>{file.name}</span>
-              {activeId === file.id ? <Check aria-hidden="true" size={14} /> : null}
+              {activeId === file.id ? (
+                <Check aria-hidden="true" size={14} />
+              ) : null}
             </button>
           ))}
         </div>
@@ -199,7 +206,11 @@ export function LandingEventDisplay() {
         </aside>
 
         <div className={styles.eventView}>
-          <svg className={styles.eventSvg} viewBox="0 0 600 420" aria-hidden="true">
+          <svg
+            className={styles.eventSvg}
+            viewBox="0 0 600 420"
+            aria-hidden="true"
+          >
             <g className={styles.eventRings}>
               <circle cx="300" cy="206" r="70" />
               <circle cx="300" cy="206" r="122" />
@@ -213,11 +224,26 @@ export function LandingEventDisplay() {
               <path d="M300 206L498 350" />
             </g>
             <g className={styles.signalTracks}>
-              <path className={styles.signalTrackYellow} d="M300 206C258 156 193 122 84 106" />
-              <path className={styles.signalTrackCyan} d="M300 206C360 164 430 152 526 112" />
-              <path className={styles.signalTrackBlue} d="M300 206C350 252 414 304 492 338" />
-              <path className={styles.signalTrackRed} d="M300 206C244 246 185 298 112 354" />
-              <path className={styles.signalTrackActive} d="M300 206C279 260 276 324 302 394" />
+              <path
+                className={styles.signalTrackYellow}
+                d="M300 206C258 156 193 122 84 106"
+              />
+              <path
+                className={styles.signalTrackCyan}
+                d="M300 206C360 164 430 152 526 112"
+              />
+              <path
+                className={styles.signalTrackBlue}
+                d="M300 206C350 252 414 304 492 338"
+              />
+              <path
+                className={styles.signalTrackRed}
+                d="M300 206C244 246 185 298 112 354"
+              />
+              <path
+                className={styles.signalTrackActive}
+                d="M300 206C279 260 276 324 302 394"
+              />
             </g>
             <g className={styles.eventNodes}>
               <circle cx="84" cy="106" r="4" />
@@ -228,17 +254,28 @@ export function LandingEventDisplay() {
             </g>
           </svg>
 
-          <div className={styles.eventGridLabel}>repository cross-section / selected signal</div>
+          <div className={styles.eventGridLabel}>
+            repository cross-section / selected signal
+          </div>
           <div className={styles.eventNode}>
             <span className={styles.eventNodePulse} aria-hidden="true" />
             <span className={styles.eventNodeLabel}>ACTIVE FILE</span>
             <strong>{activeFile.name}</strong>
-            <span className={styles.eventNodeMeta}>{activeFile.kind.toUpperCase()} · {activeFile.lines.length} lines shown</span>
+            <span className={styles.eventNodeMeta}>
+              {activeFile.kind.toUpperCase()} · {activeFile.lines.length} lines
+              shown
+            </span>
           </div>
           <div className={styles.eventLegend}>
-            <span><i className={styles.legendYellow} /> branch path</span>
-            <span><i className={styles.legendCyan} /> selected file</span>
-            <span><i className={styles.legendRed} /> related signal</span>
+            <span>
+              <i className={styles.legendYellow} /> branch path
+            </span>
+            <span>
+              <i className={styles.legendCyan} /> selected file
+            </span>
+            <span>
+              <i className={styles.legendRed} /> related signal
+            </span>
           </div>
         </div>
 
@@ -248,16 +285,38 @@ export function LandingEventDisplay() {
               <FileGlyph kind={activeFile.kind} />
               <span>{activeFile.path}</span>
             </div>
-            <button type="button" className={styles.copyButton} onClick={copyFile} aria-label="Copy selected file preview">
-              {copied ? <Check aria-hidden="true" size={14} /> : <Clipboard aria-hidden="true" size={14} />}
+            <button
+              type="button"
+              className={styles.copyButton}
+              onClick={copyFile}
+              aria-label="Copy selected file preview"
+            >
+              {copied ? (
+                <Check aria-hidden="true" size={14} />
+              ) : (
+                <Clipboard aria-hidden="true" size={14} />
+              )}
             </button>
           </div>
           <pre className={styles.codeBlock}>
             <code>
               {activeFile.lines.map((line, index) => (
-                <span key={`${activeFile.id}-${index}`} className={styles.codeLine}>
-                  <span className={styles.lineNumber}>{String(index + 1).padStart(2, "0")}</span>
-                  <span className={line.trim().startsWith("//") ? styles.codeComment : styles.codeText}>{line || " "}</span>
+                <span
+                  key={`${activeFile.id}-${index}`}
+                  className={styles.codeLine}
+                >
+                  <span className={styles.lineNumber}>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className={
+                      line.trim().startsWith("//")
+                        ? styles.codeComment
+                        : styles.codeText
+                    }
+                  >
+                    {line || " "}
+                  </span>
                 </span>
               ))}
             </code>

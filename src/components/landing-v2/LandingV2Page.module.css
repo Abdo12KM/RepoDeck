@@ -156,7 +156,10 @@
   font-size: 0.76rem;
   font-weight: 750;
   text-decoration: none;
-  transition: background-color 160ms ease-out, color 160ms ease-out, transform 160ms ease-out;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out,
+    transform 160ms ease-out;
 }
 
 .navCta:hover,
@@ -377,7 +380,9 @@
   color: #071015;
   font-size: 0.76rem;
   font-weight: 760;
-  transition: background-color 160ms ease-out, transform 160ms ease-out;
+  transition:
+    background-color 160ms ease-out,
+    transform 160ms ease-out;
 }
 
 .probeButton:hover,
@@ -426,7 +431,10 @@
   color: var(--rd-muted);
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 0.68rem;
-  transition: border-color 160ms ease-out, color 160ms ease-out, background-color 160ms ease-out;
+  transition:
+    border-color 160ms ease-out,
+    color 160ms ease-out,
+    background-color 160ms ease-out;
 }
 
 .exampleButton span {
@@ -603,7 +611,9 @@
   font-size: inherit;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: background-color 160ms ease-out, color 160ms ease-out;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out;
 }
 
 .fileItem span {
@@ -838,7 +848,9 @@
   justify-content: center;
   background: transparent;
   color: var(--rd-muted);
-  transition: background-color 160ms ease-out, color 160ms ease-out;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out;
 }
 
 .copyButton:hover,
@@ -1158,7 +1170,9 @@
   background: rgba(114, 225, 226, 0.12);
   color: var(--rd-cyan);
   text-align: left;
-  transition: background-color 160ms ease-out, color 160ms ease-out;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out;
 }
 
 .phoneFileActive:hover,
@@ -1233,7 +1247,9 @@
   background: transparent;
   color: var(--rd-dim);
   font-size: 0.56rem;
-  transition: background-color 160ms ease-out, color 160ms ease-out;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out;
 }
 
 .phoneBottomBar button:hover,

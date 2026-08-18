@@ -79,10 +79,15 @@ export function RepositoryPickerDialog({
   const [step, setStep] = useState<"repo" | "branch">("repo");
   const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
   const { authenticated, isLoading: authLoading, signIn } = useAuth();
-  const { repos, isLoading, isRefreshing, error, refresh, mutate } = useRepos(
-    search,
-    authenticated,
-  );
+  const {
+    repos,
+    isLoading,
+    isRefreshing,
+    error,
+    refresh,
+    mutate,
+    lastRefreshed,
+  } = useRepos(search, authenticated);
 
   const branchTarget = step === "branch" ? selectedRepo : null;
   const { branches, isLoading: branchesLoading } = useBranches(
@@ -154,8 +159,7 @@ export function RepositoryPickerDialog({
       <DialogContent
         showCloseButton={false}
         onOpenAutoFocus={(event) => {
-          if (event.currentTarget instanceof HTMLElement)
-            event.currentTarget.focus();
+          event.preventDefault();
         }}
         className="border-border/80 bg-background fixed top-0 bottom-18 left-0 z-50 flex h-auto max-h-[calc(100dvh-4.5rem)] w-dvw max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 p-0 shadow-2xl ring-0 sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:h-[85vh] sm:max-h-[680px] sm:w-full sm:max-w-2xl sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border sm:ring-1"
       >
@@ -268,6 +272,7 @@ export function RepositoryPickerDialog({
               repoError={error}
               refresh={refresh}
               mutate={mutate}
+              lastRefreshed={lastRefreshed}
               onClose={() => onOpenChange(false)}
               onSelectRepo={(repo) => {
                 setSelectedRepo(repo);

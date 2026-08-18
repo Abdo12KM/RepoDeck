@@ -18,7 +18,8 @@ import {
   X,
   Search,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatElapsedTime } from "@/lib/utils";
+import { useLiveNow } from "@/hooks/useLiveNow";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RepoListItem, RepoItemSkeleton } from "./RepoListItem";
@@ -34,6 +35,7 @@ interface RepoSelectionStepProps {
   repoError: Error | undefined;
   refresh: () => void;
   mutate: () => void;
+  lastRefreshed?: number | null;
   onSelectRepo: (repo: Repo) => void;
   hasRepo: boolean;
   currentRepoData: Repo | null;
@@ -53,6 +55,7 @@ export function RepoSelectionStep({
   repoError,
   refresh,
   mutate,
+  lastRefreshed,
   onSelectRepo,
   hasRepo,
   currentRepoData,
@@ -123,10 +126,16 @@ export function RepoSelectionStep({
     return tabs;
   }, [repos.length, publicCount, privateCount]);
 
+  const liveNow = useLiveNow(Boolean(lastRefreshed));
+  const timeElapsed = useMemo(() => {
+    if (!lastRefreshed) return null;
+    return formatElapsedTime(lastRefreshed, liveNow);
+  }, [lastRefreshed, liveNow]);
+
   return (
     <div className="bg-background flex min-h-0 w-full max-w-full flex-1 flex-col overflow-hidden overflow-x-hidden">
       {/* Search Header Bar */}
-      <div className="bg-muted/20 flex items-center gap-2.5 border-b px-4 py-3">
+      <div className="bg-muted/20 flex items-center gap-2.5 border-b px-4 py-2.5 sm:py-3">
         <Search className="text-primary h-4 w-4 shrink-0" />
         <input
           id="repo-search"
@@ -134,7 +143,6 @@ export function RepoSelectionStep({
           onChange={(e) => setLocalSearch(e.target.value)}
           placeholder="Search repositories..."
           className="placeholder:text-muted-foreground/60 text-foreground flex-1 bg-transparent text-sm outline-hidden"
-          autoFocus
         />
         {localSearch && (
           <button
@@ -149,21 +157,39 @@ export function RepoSelectionStep({
             <X className="h-3.5 w-3.5" />
           </button>
         )}
-        <Button
-          variant="ghost"
-          size="icon-xs"
-          className="text-muted-foreground hover:text-foreground h-7 w-7 cursor-pointer rounded-md"
-          onClick={refresh}
-          disabled={isRefreshing}
-          title="Refresh repository list from GitHub"
-        >
-          <RefreshCw
-            className={cn(
-              "h-3.5 w-3.5",
-              isRefreshing && "text-primary animate-spin",
-            )}
-          />
-        </Button>
+        <div className="flex shrink-0 flex-col items-center justify-center">
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            className="text-muted-foreground hover:text-foreground h-7 w-7 cursor-pointer rounded-md"
+            onClick={refresh}
+            disabled={isRefreshing}
+            title={
+              lastRefreshed
+                ? `Last updated: ${new Date(lastRefreshed).toLocaleTimeString()} (${timeElapsed}). Click to refresh.`
+                : "Refresh repository list from GitHub"
+            }
+          >
+            <RefreshCw
+              className={cn(
+                "h-3.5 w-3.5",
+                isRefreshing && "text-primary animate-spin",
+              )}
+            />
+          </Button>
+          {timeElapsed && timeElapsed !== "—" && (
+            <span
+              className="text-muted-foreground/70 -mt-0.5 text-[9px] leading-none font-medium tracking-tight whitespace-nowrap select-none"
+              title={
+                lastRefreshed
+                  ? `Last updated at ${new Date(lastRefreshed).toLocaleTimeString()}`
+                  : undefined
+              }
+            >
+              {timeElapsed}
+            </span>
+          )}
+        </div>
         {onClose && (
           <Button
             variant="ghost"
@@ -181,13 +207,11 @@ export function RepoSelectionStep({
       {/* Scope Filter Tabs */}
       <Tabs
         value={filterType}
-        onValueChange={(v) =>
-          setFilterType(v as "all" | "public" | "private")
-        }
+        onValueChange={(v) => setFilterType(v as "all" | "public" | "private")}
       >
         <TabsList
           variant="line"
-          className="bg-muted/10 border-b border-border/60 h-auto w-full gap-0 p-0"
+          className="bg-muted/10 border-border/60 h-auto w-full gap-0 border-b p-0"
         >
           {tabsConfig.map((tab) => (
             <TabsTrigger

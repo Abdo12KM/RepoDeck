@@ -74,7 +74,7 @@ export function TiltedCard({
         }}
         className={cn(
           "relative overflow-hidden rounded-2xl border border-[#27272a] bg-[#09090b] transition-shadow duration-300",
-          isHovered && "shadow-2xl shadow-primary/10",
+          isHovered && "shadow-primary/10 shadow-2xl",
           className,
         )}
       >

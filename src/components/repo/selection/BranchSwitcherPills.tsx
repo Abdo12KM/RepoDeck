@@ -77,7 +77,7 @@ export function BranchSwitcherPills({
             <button
               type="button"
               onClick={() => setQuery("")}
-              className="text-muted-foreground hover:text-foreground absolute top-1/2 right-1.5 -translate-y-1/2 p-0.5 cursor-pointer rounded-xs"
+              className="text-muted-foreground hover:text-foreground absolute top-1/2 right-1.5 -translate-y-1/2 cursor-pointer rounded-xs p-0.5"
               title="Clear search"
               aria-label="Clear branch search"
             >

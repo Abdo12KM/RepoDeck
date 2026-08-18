@@ -113,10 +113,18 @@ export function LandingRepositoryProbe() {
             className={styles.probeInput}
           />
         </div>
-        <button type="submit" className={styles.probeButton} disabled={isLoading}>
+        <button
+          type="submit"
+          className={styles.probeButton}
+          disabled={isLoading}
+        >
           {isLoading ? (
             <>
-              <LoaderCircle aria-hidden="true" size={17} className={styles.spin} />
+              <LoaderCircle
+                aria-hidden="true"
+                size={17}
+                className={styles.spin}
+              />
               Opening…
             </>
           ) : (

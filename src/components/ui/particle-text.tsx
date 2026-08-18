@@ -220,8 +220,10 @@ export function ParticleText({
             Math.max(1, reducedMotion ? 1 : gatherDuration);
           progress = clamp(local, 0, 1);
           const eased = easeOutCubic(progress);
-          baseX = particle.startX + (particle.targetX - particle.startX) * eased;
-          baseY = particle.startY + (particle.targetY - particle.startY) * eased;
+          baseX =
+            particle.startX + (particle.targetX - particle.startX) * eased;
+          baseY =
+            particle.startY + (particle.targetY - particle.startY) * eased;
           if (progress < 1) complete = false;
         } else if (!reducedMotion && idleDrift > 0) {
           const driftTime = now * 0.001;
@@ -385,11 +387,7 @@ export function ParticleText({
         const depth = 0.45 + (((index * 233 + 97) % 1000) / 1000) * 0.9;
         const blend =
           baseRgb && highlightRgb
-            ? clamp(
-                target.x / Math.max(1, width) + (seed - 0.5) * 0.35,
-                0,
-                1,
-              )
+            ? clamp(target.x / Math.max(1, width) + (seed - 0.5) * 0.35, 0, 1)
             : 0;
         const particleColor =
           baseRgb && highlightRgb
@@ -398,9 +396,7 @@ export function ParticleText({
         const angle = seed * Math.PI * 2;
         const distance = (reducedMotion ? 0 : scatter) * (0.35 + depth * 0.75);
         const startX =
-          target.x +
-          Math.cos(angle) * distance +
-          (seed - 0.5) * scatter * 0.45;
+          target.x + Math.cos(angle) * distance + (seed - 0.5) * scatter * 0.45;
         const startY =
           target.y +
           Math.sin(angle) * distance +

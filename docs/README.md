@@ -5,6 +5,8 @@ RepoDeck is a read-only GitHub repository viewer. The root [README](../README.md
 - [Architecture](architecture.md) — application pages, URL state, request flow, authentication, persistence, caching, and API routes.
 - [Deployment](deployment.md) — environment setup, GitHub Apps, Neon, Vercel, migrations, DNS, and verification.
 - [Security](security.md) — access control, token protection, sessions, webhook validation, caching, and deployment checks.
+- [PWA](pwa.md) — Progressive Web App capabilities, service worker registration, and push notification configuration.
+- [Commit guidelines](commit-guidelines.md) — staged review workflow, code quality checklists, and conventional commit standards.
 - [Session findings](SESSION-FINDINGS.md) — current landing decisions, historical landing-v2 notes, responsive/accessibility validation, and repository-content search feasibility.
 
 ## Documentation maintenance

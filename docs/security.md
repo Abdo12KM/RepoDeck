@@ -42,6 +42,16 @@ The webhook route accepts installation lifecycle events only after validating th
 
 Set a unique webhook secret in every environment where the GitHub App webhook is enabled. Use a secure HTTPS tunnel instead of exposing an unauthenticated local endpoint during development.
 
+## PWA and Web Push controls
+
+- The service worker is served from `/sw.js` with a root scope, `Cache-Control: no-cache`, `updateViaCache: "none"`, and a same-origin script CSP. It does not force activation with `skipWaiting()` or `clients.claim()`.
+- Cache Storage contains only the versioned standalone `/offline.html` fallback. The worker does not cache Next.js application assets, RSC traffic, `/api/*`, optimized images, authenticated HTML, repository trees, or file payloads.
+- Push subscriptions can be created only for a signed-in RepoDeck user and are stored with a user foreign key. Endpoint ownership is never silently transferred between accounts; logout revokes the current user/endpoint association before clearing the auth session when the endpoint is available.
+- Test sends require the same signed-in user and exact stored endpoint, use a shared Postgres-backed rate limit, and accounts have a bounded active-subscription count.
+- The VAPID private key stays server-side. Only `NEXT_PUBLIC_VAPID_PUBLIC_KEY` is exposed to browser code.
+- Server-side delivery validates HTTPS browser push-service endpoints against a maintained allowlist before passing them to `web-push`, preventing the sender from becoming a generic SSRF primitive. Operators can add explicit trusted push hosts with `PUSH_ENDPOINT_EXTRA_HOSTS`.
+- HTTP 404 and 410 responses from a push service retire the stored subscription. Notification URLs are normalized to same-origin paths before sending and are validated again by the service worker on click.
+
 ## Request isolation and caching
 
 Every GitHub route resolves the current session for the request. Anonymous and authenticated clients are created separately. Authenticated tree and file responses are explicitly marked private and are never shared-cached:
@@ -70,7 +80,7 @@ The browser may store recent repository selections, recent file paths, expanded 
 
 ## Data retention
 
-- Users, encrypted OAuth credentials, and GitHub installation metadata are stored in Neon Postgres.
+- Users, encrypted OAuth credentials, GitHub installation metadata, and account-bound browser push subscriptions are stored in Neon Postgres.
 - The fixed public RepoDeck demo tree and bounded file contents are stored in dedicated application tables.
 - Arbitrary and private repository trees and file contents are fetched on demand and are not written to application tables.
 - Public HTTP responses can be held briefly by shared caching infrastructure.
@@ -87,6 +97,7 @@ Before exposing an environment to users:
 - confirm all callback and Setup URLs exactly match the deployed origin;
 - keep environment secrets out of version control and deployment logs;
 - run migrations from a trusted environment and review generated SQL;
+- keep the VAPID private key server-only, validate push delivery, and verify the service worker never caches authenticated API responses;
 - test the fixed anonymous demo, authenticated repository access, private access, invalid webhooks, expired sessions, and rate-limit handling.
 
 This page documents the current implementation. It does not replace provider configuration review, secret-rotation procedures, or an organization’s broader security policy.

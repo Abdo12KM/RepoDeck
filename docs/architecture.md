@@ -74,7 +74,8 @@ Neon Postgres stores:
 
 - users: RepoDeck ID, GitHub ID, login, display name, and avatar URL;
 - GitHub accounts: encrypted access and refresh tokens plus expiry timestamps;
-- GitHub installations: installation and account identifiers, selection mode, connection owner, suspension state, and revocation time.
+- GitHub installations: installation and account identifiers, selection mode, connection owner, suspension state, and revocation time;
+- push subscriptions: account-bound browser endpoints plus Web Push encryption keys;
 - fixed public RepoDeck demo: one tree snapshot and its bounded file contents for `Abdo12KM/repodeck` on `main`.
 
 The database does not store arbitrary or private repository trees, file contents, chat data, or generated indexes. Public HTTP caching remains a separate temporary response-cache policy for non-demo requests.

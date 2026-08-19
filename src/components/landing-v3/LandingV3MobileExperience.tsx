@@ -8,7 +8,6 @@ import {
   Smartphone,
   Zap,
 } from "lucide-react";
-import { motion } from "motion/react";
 import { LandingV3InteractivePhone } from "./LandingV3InteractivePhone";
 
 const MOBILE_FEATURES = [

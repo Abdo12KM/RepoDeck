@@ -17,6 +17,7 @@ import {
   ExternalLink,
   Command,
   Settings2,
+  Smartphone,
 } from "lucide-react";
 import { RepoDeckIcon } from "@/components/ui/RepoDeckLogo";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ import { useAppearanceSettings } from "@/hooks/useAppearanceSettings";
 import { useModifierKey } from "@/hooks/useModifierKey";
 import { useIsTouchDevice } from "@/hooks/useTouchDevice";
 import { cn } from "@/lib/utils";
+import { openPwaSettings } from "@/components/pwa";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -310,6 +312,14 @@ export function ViewerHeader({
                     </Kbd>
                   </DropdownMenuItem>
 
+                  <DropdownMenuItem
+                    onClick={openPwaSettings}
+                    className="flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2"
+                  >
+                    <Smartphone className="text-muted-foreground h-4 w-4 shrink-0" />
+                    <span>Install & notifications</span>
+                  </DropdownMenuItem>
+
                   {onOpenShortcutsHelp && !isTouchDevice && (
                     <DropdownMenuItem
                       onClick={onOpenShortcutsHelp}
@@ -390,6 +400,14 @@ export function ViewerHeader({
                       <Kbd className="bg-muted text-muted-foreground font-mono text-[10px]">
                         {modifier},
                       </Kbd>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={openPwaSettings}
+                      className="flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2"
+                    >
+                      <Smartphone className="text-muted-foreground h-4 w-4 shrink-0" />
+                      <span>Install & notifications</span>
                     </DropdownMenuItem>
 
                     {onOpenShortcutsHelp && !isTouchDevice && (

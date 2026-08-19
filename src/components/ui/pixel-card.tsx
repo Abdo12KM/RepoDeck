@@ -131,7 +131,7 @@ export function PixelCard({
   gap = 5,
   speed = 35,
   colors,
-  noFocus = false,
+  noFocus: _noFocus = false,
   className,
   children,
   ...props

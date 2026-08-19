@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight, Download, Github } from "lucide-react";
 import { RepoDeckLogo } from "@/components/ui/RepoDeckLogo";
 import { Button } from "@/components/ui/button";
+import { openPwaSettings } from "@/components/pwa";
 import { REPODECK_DEMO_ROUTE, REPODECK_GITHUB_URL } from "./landing-v3-demo";
 
 const NAV_LINKS = [
@@ -45,6 +46,18 @@ export function LandingV3Header() {
 
         {/* Action Controls */}
         <div className="flex items-center gap-2.5">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={openPwaSettings}
+            className="text-muted-foreground hover:text-foreground h-8 gap-1.5 px-2.5 text-xs"
+            aria-label="Install RepoDeck or manage notifications"
+          >
+            <Download className="h-3.5 w-3.5" />
+            <span className="hidden md:inline">Install</span>
+          </Button>
+
           <a
             href={REPODECK_GITHUB_URL}
             target="_blank"

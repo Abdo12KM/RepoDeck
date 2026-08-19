@@ -53,3 +53,6 @@ next-env.d.ts
 
 # temporary zip outputs
 /temp
+
+.codex-remote-attachments
+certificates

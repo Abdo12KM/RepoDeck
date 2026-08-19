@@ -3,39 +3,30 @@
 import React, { useState } from "react";
 import {
   ArrowLeft,
-  ArrowRight,
-  BookOpen,
   Check,
   ChevronDown,
   ChevronRight,
   Clock,
-  Code2,
   Command,
   Copy,
   Download,
-  ExternalLink,
   FileCode2,
-  Folder,
   FolderTree,
   GitBranch,
   Globe,
   ListOrdered,
   Lock,
-  RefreshCw,
   RotateCcw,
   Search,
   SlidersHorizontal,
-  Star,
   WrapText,
   X,
-  ZoomIn,
-  ZoomOut,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { RepoDeckIcon } from "@/components/ui/RepoDeckLogo";
 import { RepoIcon } from "@/components/repo/RepoIcon";
 import { FileIcon } from "@/components/repo/tree/FileIcon";
@@ -107,16 +98,10 @@ export function LandingV3InteractivePhone() {
   // Settings
   const [wrapLines, setWrapLines] = useState(true);
   const [showLineNumbers, setShowLineNumbers] = useState(true);
-  const [fontSizeIndex, setFontSizeIndex] = useState(2); // 100%
   const [copied, setCopied] = useState(false);
 
   // Tree sub-tabs
   const [treeTab, setTreeTab] = useState<"files" | "recents">("files");
-
-  // Search filter tabs
-  const [searchTab, setSearchTab] = useState<
-    "all" | "files" | "branches" | "repos"
-  >("repos");
 
   // Repo picker tabs
   const [repoFilterTab, setRepoFilterTab] = useState<

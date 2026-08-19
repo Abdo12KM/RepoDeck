@@ -21,6 +21,7 @@ RepoDeck opens repository trees and files directly from GitHub without cloning r
 - Keep repository, branch, and selected-file state in shareable `/repositories` URLs.
 - Use a responsive desktop workspace, touch-friendly mobile drawers, and keyboard shortcuts.
 - Customize application colors, code theme, typography, radius, and light/dark mode with 22 built-in appearance presets.
+- Install RepoDeck as a PWA, use an offline fallback, and enable account-bound Web Push notifications.
 
 ## Product boundaries
 
@@ -87,6 +88,15 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000). The landing page is `/`; the repository workspace is `/repositories`.
 
+For local install/push testing, generate VAPID keys and run Next.js with local HTTPS:
+
+```bash
+pnpm pwa:vapid
+pnpm dev:https
+```
+
+Copy the generated VAPID values into `.env.local` before starting the HTTPS server. Browser notification permission must also be enabled. If you test the signed-in push flow over `https://localhost:3000`, update the development GitHub App callbacks and the two callback environment variables to use that HTTPS origin as well.
+
 ## Environment variables
 
 The complete template is in [.env.example](.env.example). Runtime validation is defined in [src/env.ts](src/env.ts).
@@ -102,9 +112,13 @@ The complete template is in [.env.example](.env.example). Runtime validation is 
 | GITHUB_APP_INSTALL_CALLBACK_URL | GitHub App Setup URL, normally /api/github/install/callback.                      |
 | GITHUB_APP_WEBHOOK_SECRET       | Secret used to verify installation webhooks. Set it when webhooks are enabled.    |
 | GITHUB_TOKEN_ENCRYPTION_KEY     | 32-byte AES-GCM key encoded as exactly 64 hexadecimal characters.                 |
+| NEXT_PUBLIC_VAPID_PUBLIC_KEY    | Public P-256 VAPID key used by browsers when subscribing to Web Push.             |
+| VAPID_PRIVATE_KEY               | Private VAPID key used server-side to authenticate push delivery.                 |
+| VAPID_SUBJECT                   | `mailto:` or HTTPS contact URI included in VAPID tokens.                          |
+| PUSH_ENDPOINT_EXTRA_HOSTS       | Optional comma-separated extra trusted browser push-service hostnames.            |
 | NODE_ENV                        | One of development, production, or test.                                          |
 
-Do not commit .env, .env.local, .env.production.local, client secrets, session secrets, webhook secrets, or encryption keys.
+Do not commit `.env.local`, client secrets, session secrets, webhook secrets, or encryption keys. Production deployments should configure environment variables directly in the hosting provider dashboard.
 
 ## GitHub App setup
 
@@ -209,7 +223,7 @@ The browser talks to Next.js route handlers rather than GitHub directly:
 4. The server validates query parameters with Zod, calls GitHub, and returns viewer-safe JSON or raw media responses.
 5. Public responses receive short shared caching headers; authenticated responses receive `private, no-store`.
 
-The database stores users, encrypted GitHub OAuth accounts, GitHub installation metadata, and the fixed public RepoDeck demo snapshot. It does not store arbitrary or private repository content. See [docs/architecture.md](docs/architecture.md) for the full request and data-flow description.
+The database stores users, encrypted GitHub OAuth accounts, GitHub installation metadata, account-bound Web Push subscriptions, and the fixed public RepoDeck demo snapshot. It does not store arbitrary or private repository content. See [docs/architecture.md](docs/architecture.md) for the full request and data-flow description.
 
 ## API surface
 

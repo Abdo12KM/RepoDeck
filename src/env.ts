@@ -14,11 +14,19 @@ export const env = createEnv({
     GITHUB_TOKEN_ENCRYPTION_KEY: z
       .string()
       .regex(/^[0-9a-fA-F]{64}$/, "Must be a 32-byte hex key"),
+    VAPID_PRIVATE_KEY: z.string().min(1).optional(),
+    PUSH_ENDPOINT_EXTRA_HOSTS: z.string().optional(),
+    VAPID_SUBJECT: z
+      .string()
+      .refine(
+        (value) => value.startsWith("mailto:") || value.startsWith("https://"),
+        "Must be a mailto: or https: URI",
+      )
+      .optional(),
     NODE_ENV: z.enum(["development", "production", "test"]),
   },
   client: {
-    // PUBLIC environment variables go here
-    // NEXT_PUBLIC_EXAMPLE: z.string().min(1),
+    NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().min(1).optional(),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -31,6 +39,10 @@ export const env = createEnv({
       process.env.GITHUB_APP_INSTALL_CALLBACK_URL,
     GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
     GITHUB_TOKEN_ENCRYPTION_KEY: process.env.GITHUB_TOKEN_ENCRYPTION_KEY,
+    VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
+    PUSH_ENDPOINT_EXTRA_HOSTS: process.env.PUSH_ENDPOINT_EXTRA_HOSTS,
+    VAPID_SUBJECT: process.env.VAPID_SUBJECT,
+    NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
     NODE_ENV: process.env.NODE_ENV,
   },
 });

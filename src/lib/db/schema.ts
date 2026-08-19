@@ -2,6 +2,7 @@ import {
   bigint,
   boolean,
   integer,
+  index,
   jsonb,
   pgTable,
   primaryKey,
@@ -27,6 +28,49 @@ export const users = pgTable("users", {
   avatarUrl: text("avatar_url"),
   ...timestamps,
 });
+
+export const pushSubscriptions = pgTable(
+  "push_subscriptions",
+  {
+    endpoint: text("endpoint").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expirationTime: bigint("expiration_time", { mode: "number" }),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    lastSeenAt: timestamp("last_seen_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    ...timestamps,
+  },
+  (table) => ({
+    userLastSeenIdx: index("push_subscriptions_user_last_seen_idx").on(
+      table.userId,
+      table.lastSeenAt,
+    ),
+  }),
+);
+
+export const pushRateLimits = pgTable(
+  "push_rate_limits",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+    count: integer("count").default(0).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    userWindowPk: primaryKey({ columns: [table.userId, table.windowStart] }),
+    windowStartIdx: index("push_rate_limits_window_start_idx").on(
+      table.windowStart,
+    ),
+  }),
+);
 
 export const githubAccounts = pgTable("github_accounts", {
   userId: text("user_id")
@@ -106,6 +150,8 @@ export const githubRepositoryFiles = pgTable(
 );
 
 export type User = typeof users.$inferSelect;
+export type PushSubscription = typeof pushSubscriptions.$inferSelect;
+export type PushRateLimit = typeof pushRateLimits.$inferSelect;
 export type GitHubAccount = typeof githubAccounts.$inferSelect;
 export type GitHubInstallation = typeof githubInstallations.$inferSelect;
 export type GitHubRepositoryCache = typeof githubRepositoryCaches.$inferSelect;

@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AppearanceProvider } from "@/hooks/useAppearanceSettings";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { SWRProvider } from "@/components/providers/SWRProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { PwaManager } from "@/components/pwa";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -15,11 +16,25 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "RepoDeck · GitHub repository viewer",
   description: "A focused, responsive way to browse GitHub repositories.",
-  icons: {
-    icon: [{ url: "/favicon.png", type: "image/png" }],
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+  applicationName: "RepoDeck",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "RepoDeck",
   },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 export default async function RootLayout({
@@ -42,6 +57,7 @@ export default async function RootLayout({
           <AppearanceProvider>
             <SWRProvider>
               {children}
+              <PwaManager />
               <Toaster />
             </SWRProvider>
           </AppearanceProvider>

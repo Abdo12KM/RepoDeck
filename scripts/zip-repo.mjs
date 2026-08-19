@@ -244,7 +244,7 @@ function getNonGitignoredFiles() {
     }
 
     return files;
-  } catch (error) {
+  } catch (_error) {
     console.warn(
       "⚠️  Git command failed or not in git repo, falling back to manual file walker...",
     );

@@ -9,6 +9,7 @@ This page describes the current deployment shape and the configuration required 
 - A GitHub App for user authorization and repository installation.
 - A signed session cookie for browser sessions.
 - GitHub installation webhooks for suspension and revocation updates.
+- A root-scoped service worker plus VAPID credentials for optional Web Push notifications.
 
 Production and local development use separate GitHub Apps because each App has its own installation setup configuration:
 
@@ -97,6 +98,10 @@ Copy .env.example to the environment-specific file and replace every placeholder
 | GITHUB_APP_INSTALL_CALLBACK_URL | Yes         | Exact GitHub App Setup URL.                              |
 | GITHUB_APP_WEBHOOK_SECRET       | Conditional | Required to verify enabled webhooks.                     |
 | GITHUB_TOKEN_ENCRYPTION_KEY     | Yes         | Exactly 64 hexadecimal characters representing 32 bytes. |
+| NEXT_PUBLIC_VAPID_PUBLIC_KEY    | For push    | Public VAPID key exposed to the browser.                 |
+| VAPID_PRIVATE_KEY               | For push    | Private VAPID signing key; never expose to the browser.  |
+| VAPID_SUBJECT                   | For push    | `mailto:` or HTTPS contact URI for VAPID.                |
+| PUSH_ENDPOINT_EXTRA_HOSTS       | Optional    | Comma-separated additional trusted browser push hosts.   |
 | NODE_ENV                        | Yes         | development, production, or test.                        |
 
 Do not commit environment files, database credentials, OAuth secrets, webhook secrets, session secrets, or encryption keys.
@@ -138,7 +143,7 @@ GITHUB_APP_CALLBACK_URL=http://localhost:3000/api/auth/github/callback
 GITHUB_APP_INSTALL_CALLBACK_URL=http://localhost:3000/api/github/install/callback
 ```
 
-Open http://localhost:3000 after the server starts.
+Open http://localhost:3000 after the server starts. For PWA install and Web Push testing, run `pnpm pwa:vapid`, copy the generated values into `.env.local`, then start `pnpm dev:https` and use the HTTPS local URL.
 
 ## Vercel
 
@@ -182,3 +187,5 @@ If the domain or host changes, update DNS, GitHub App callback URLs, the Setup U
 7. Send a signed installation webhook and verify the stored installation state changes.
 8. Confirm invalid webhook signatures return HTTP 401.
 9. Confirm GitHub rate limits are surfaced as HTTP 429 responses.
+10. Open Install & notifications, install the PWA, enable notifications, and send a test push.
+11. Disable the network and confirm a navigation falls back to the standalone `/offline.html`; DevTools Cache Storage should contain only the current `repodeck-offline-vN` cache and that file.

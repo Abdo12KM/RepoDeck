@@ -27,12 +27,12 @@ export function DecryptedText({
   characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+",
   className,
   parentClassName,
-  encryptedClassName,
+  encryptedClassName: _encryptedClassName,
   animateOn = "hover",
 }: DecryptedTextProps) {
   const [displayText, setDisplayText] = useState(text);
   const [isHovering, setIsHovering] = useState(false);
-  const [isScrolledIntoView, setIsScrolledIntoView] = useState(false);
+  const [isScrolledIntoView, _setIsScrolledIntoView] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
   const containerRef = useRef<HTMLSpanElement>(null);
 
@@ -48,7 +48,7 @@ export function DecryptedText({
 
     if (shouldAnimate) {
       interval = setInterval(() => {
-        setDisplayText((prevText) =>
+        setDisplayText(() =>
           text
             .split("")
             .map((char, index) => {

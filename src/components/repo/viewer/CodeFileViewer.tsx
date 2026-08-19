@@ -29,6 +29,7 @@ import {
   Code2,
   ListOrdered,
   ArrowLeft,
+  SlidersHorizontal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -50,6 +51,7 @@ interface CodeFileViewerProps {
   onClose?: () => void;
   toolsOpen?: boolean;
   onToolsOpenChange?: (open: boolean) => void;
+  onOpenAppearance?: () => void;
   // Legacy / modal support
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -73,6 +75,7 @@ export function CodeFileViewer({
   onClose,
   toolsOpen,
   onToolsOpenChange,
+  onOpenAppearance,
   className,
 }: CodeFileViewerProps) {
   const { resolvedTheme } = useTheme();
@@ -662,6 +665,19 @@ export function CodeFileViewer({
         )}
       </ScrollArea>
 
+      {/* Floating Code Tools FAB Button on Mobile (Bottom-Right under thumb) */}
+      <div className="absolute right-4 bottom-4 z-20 sm:hidden">
+        <button
+          type="button"
+          onClick={() => setToolsOpen(true)}
+          className="border-border/80 bg-background/90 text-foreground hover:bg-background flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border shadow-xl backdrop-blur-md transition-all hover:scale-105 active:scale-95"
+          aria-label="Open code controls"
+          title="Open code controls"
+        >
+          <SlidersHorizontal className="text-primary h-4.5 w-4.5" />
+        </button>
+      </div>
+
       {/* Mobile Tools Bottom Sheet Drawer */}
       <MobileCodeToolsDrawer
         open={isToolsOpen}
@@ -691,6 +707,7 @@ export function CodeFileViewer({
         onCopy={handleCopyCode}
         copied={copied}
         onDownload={handleDownload}
+        onOpenAppearance={onOpenAppearance}
       />
     </div>
   );

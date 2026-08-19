@@ -310,7 +310,7 @@ export function MobileCodeToolsDrawer({
           )}
         </div>
 
-        <DrawerFooter className="pt-0">
+        <DrawerFooter className="pt-0 pb-6 sm:pb-4">
           <Button
             variant="secondary"
             onClick={() => onOpenChange(false)}

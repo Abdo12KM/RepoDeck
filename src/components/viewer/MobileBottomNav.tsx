@@ -34,7 +34,7 @@ export function MobileBottomNav({
 
   return (
     <nav
-      className="bg-background/95 supports-backdrop-filter:bg-background/85 border-border/80 fixed inset-x-0 bottom-0 z-[60] flex h-18 touch-manipulation items-center justify-around border-t px-1.5 shadow-2xl backdrop-blur-xl select-none lg:hidden"
+      className="bg-background/95 supports-backdrop-filter:bg-background/85 border-border/80 fixed inset-x-0 bottom-0 z-40 flex h-18 touch-manipulation items-center justify-around border-t px-1.5 shadow-2xl backdrop-blur-xl select-none lg:hidden"
       aria-label="Mobile navigation bar"
     >
       {/* 1. Files / Tree Explorer Tab */}

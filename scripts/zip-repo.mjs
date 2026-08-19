@@ -33,6 +33,9 @@ function parseArgs() {
     output: null,
     name: null,
     timestamp: false,
+    gdrive: false,
+    gdriveFolder: null,
+    gdriveDir: null,
     help: false,
   };
 
@@ -46,6 +49,17 @@ function parseArgs() {
       options.output = args[++i];
     } else if (arg === "-n" || arg === "--name") {
       options.name = args[++i];
+    } else if (arg === "-g" || arg === "--gdrive") {
+      options.gdrive = true;
+      if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+        options.gdriveFolder = args[++i];
+      }
+    } else if (arg === "--gdrive-dir") {
+      options.gdrive = true;
+      options.gdriveDir = args[++i];
+    } else if (arg === "--gdrive-folder") {
+      options.gdrive = true;
+      options.gdriveFolder = args[++i];
     } else if (!arg.startsWith("-") && !options.output) {
       options.output = arg;
     }
@@ -302,6 +316,160 @@ function formatDuration(ms) {
   return `${(ms / 1000).toFixed(2)}s`;
 }
 
+// Google Drive / Desktop directory resolution
+function findGoogleDriveRoot(customDir = null) {
+  if (customDir && fs.existsSync(customDir)) {
+    return customDir;
+  }
+
+  const envDir = process.env.GDRIVE_DIR || process.env.GOOGLE_DRIVE_PATH;
+  if (envDir && fs.existsSync(envDir)) {
+    return envDir;
+  }
+
+  // 1. Check Desktop "Google Drive Uploads" or "Google Drive" folder first
+  const userProfile = process.env.USERPROFILE || "";
+  if (userProfile) {
+    const desktopCandidates = [
+      path.join(userProfile, "Desktop", "Google Drive Uploads"),
+      path.join(userProfile, "Desktop", "Google Drive"),
+      path.join(userProfile, "Desktop", "My Drive"),
+    ];
+    for (const cand of desktopCandidates) {
+      if (cand && fs.existsSync(cand)) return cand;
+    }
+  }
+
+  // 2. Windows drive detection (G:\My Drive, etc.)
+  if (process.platform === "win32") {
+    if (fs.existsSync("G:\\My Drive")) return "G:\\My Drive";
+    if (fs.existsSync("G:\\")) return "G:\\";
+
+    // Scan other drive letters D..Z for "My Drive"
+    const drives = [
+      "D",
+      "E",
+      "F",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ];
+    for (const d of drives) {
+      const myDrive = `${d}:\\My Drive`;
+      if (fs.existsSync(myDrive)) return myDrive;
+      const rootDrive = `${d}:\\`;
+      if (fs.existsSync(rootDrive)) {
+        try {
+          const subdirs = fs.readdirSync(rootDrive);
+          if (subdirs.includes("My Drive"))
+            return path.join(rootDrive, "My Drive");
+        } catch {}
+      }
+    }
+
+    // User profile paths
+    const userCandidates = [
+      path.join(userProfile, "Google Drive", "My Drive"),
+      path.join(userProfile, "Google Drive"),
+      path.join(userProfile, "My Drive"),
+    ];
+    for (const candidate of userCandidates) {
+      if (candidate && fs.existsSync(candidate)) return candidate;
+    }
+  } else if (process.platform === "darwin") {
+    const home = process.env.HOME || "";
+    const desktopCandidate = path.join(home, "Desktop", "Google Drive Uploads");
+    if (fs.existsSync(desktopCandidate)) return desktopCandidate;
+
+    const cloudStorage = path.join(home, "Library", "CloudStorage");
+    if (fs.existsSync(cloudStorage)) {
+      try {
+        const entries = fs.readdirSync(cloudStorage);
+        for (const entry of entries) {
+          if (entry.toLowerCase().includes("googledrive")) {
+            const myDrive = path.join(cloudStorage, entry, "My Drive");
+            if (fs.existsSync(myDrive)) return myDrive;
+            const entryPath = path.join(cloudStorage, entry);
+            if (fs.existsSync(entryPath)) return entryPath;
+          }
+        }
+      } catch {}
+    }
+    const macCandidates = [
+      path.join(home, "Google Drive", "My Drive"),
+      path.join(home, "Google Drive"),
+      path.join(home, "My Drive"),
+    ];
+    for (const candidate of macCandidates) {
+      if (candidate && fs.existsSync(candidate)) return candidate;
+    }
+  } else {
+    // Linux
+    const home = process.env.HOME || "";
+    const linuxCandidates = [
+      path.join(home, "Desktop", "Google Drive Uploads"),
+      path.join(home, "Google Drive"),
+      path.join(home, "google-drive"),
+    ];
+    for (const candidate of linuxCandidates) {
+      if (candidate && fs.existsSync(candidate)) return candidate;
+    }
+  }
+
+  return null;
+}
+
+function resolveGoogleDriveDestination(options) {
+  const gdriveRoot = findGoogleDriveRoot(options.gdriveDir);
+  if (!gdriveRoot) {
+    throw new Error(
+      "Could not automatically detect Google Drive directory.\n" +
+        "Please specify it with --gdrive-dir <path> or set GDRIVE_DIR in your environment.",
+    );
+  }
+
+  if (options.gdriveFolder) {
+    const folder = options.gdriveFolder.trim();
+    if (path.isAbsolute(folder)) {
+      return folder;
+    }
+    if (
+      folder === "." ||
+      folder === "/" ||
+      folder === "\\" ||
+      folder.toLowerCase() === "root"
+    ) {
+      return gdriveRoot;
+    }
+    return path.join(gdriveRoot, folder);
+  }
+
+  // If the detected root is already a specialized folder like "Google Drive Uploads", save directly into it.
+  const baseName = path.basename(gdriveRoot).toLowerCase();
+  if (baseName.includes("upload") || baseName.includes("backup")) {
+    return gdriveRoot;
+  }
+
+  // Default for general "My Drive": put in "Backups" subfolder inside Google Drive
+  return path.join(gdriveRoot, "Backups");
+}
+
 // Main execution
 function main() {
   const options = parseArgs();
@@ -312,13 +480,16 @@ Usage: pnpm zip [options]
        node scripts/zip-repo.mjs [options]
 
 Zips all tracked and untracked files in the repository that are not ignored by .gitignore
-and outputs the zip archive to the project's /temp directory.
+and outputs the zip archive to the project's /temp directory. Optionally syncs to Google Drive.
 
 Options:
-  -o, --output <path>    Specify custom output file or directory (default: temp/<repo-name>.zip)
-  -n, --name <filename>  Specify archive name (default: <package-name>.zip)
-  -t, --timestamp        Append timestamp to archive filename
-  -h, --help             Show this help message
+  -o, --output <path>            Specify custom output file or directory (default: temp/<repo-name>.zip)
+  -n, --name <filename>          Specify archive name (default: <package-name>.zip)
+  -t, --timestamp                Append timestamp to archive filename
+  -g, --gdrive [folder]          Sync archive to Google Drive (default subfolder: Backups)
+      --gdrive-folder <folder>   Specify Google Drive subfolder or custom destination
+      --gdrive-dir <path>        Specify custom Google Drive root directory
+  -h, --help                     Show this help message
 `);
     process.exit(0);
   }
@@ -399,14 +570,38 @@ Options:
     ? targetZipPath
     : relOutputPath;
 
+  // Handle Google Drive sync if requested
+  let gdriveDestinationFile = null;
+  let gdriveError = null;
+
+  if (options.gdrive) {
+    try {
+      const gdriveDestDir = resolveGoogleDriveDestination(options);
+      fs.mkdirSync(gdriveDestDir, { recursive: true });
+      const destFilename = path.basename(targetZipPath);
+      gdriveDestinationFile = path.join(gdriveDestDir, destFilename);
+
+      console.log(`☁️  Syncing to Google Drive: ${gdriveDestinationFile}...`);
+      fs.copyFileSync(targetZipPath, gdriveDestinationFile);
+    } catch (err) {
+      gdriveError = err.message;
+      console.error(`⚠️  Google Drive sync warning: ${err.message}`);
+    }
+  }
+
   console.log("\n========================================");
   console.log("✅ Repository zipped successfully!");
-  console.log(`📁 Destination:  ${displayOutputPath}`);
-  console.log(`📊 Files:        ${processedCount.toLocaleString()} files`);
+  console.log(`📁 Local Archive: ${displayOutputPath}`);
+  if (gdriveDestinationFile) {
+    console.log(`☁️  Google Drive:  ${gdriveDestinationFile}`);
+  } else if (gdriveError) {
+    console.log(`⚠️  Google Drive:  Sync failed (${gdriveError})`);
+  }
+  console.log(`📊 Files:         ${processedCount.toLocaleString()} files`);
   console.log(
-    `🗜️  Archive Size: ${formatBytes(zipStat.size)} (saved ${ratio}%)`,
+    `🗜️  Archive Size:  ${formatBytes(zipStat.size)} (saved ${ratio}%)`,
   );
-  console.log(`⏱️  Time:         ${formatDuration(duration)}`);
+  console.log(`⏱️  Time:          ${formatDuration(duration)}`);
   console.log("========================================\n");
 }
 

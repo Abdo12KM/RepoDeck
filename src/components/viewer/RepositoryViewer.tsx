@@ -356,6 +356,7 @@ export function RepositoryViewer() {
                         onClose={closeFile}
                         toolsOpen={mobileToolsOpen}
                         onToolsOpenChange={setMobileToolsOpen}
+                        onOpenAppearance={() => setAppearanceOpen(true)}
                       />
                     ) : (
                       <RepositoryWorkspaceWelcome
@@ -388,6 +389,7 @@ export function RepositoryViewer() {
                   onClose={closeFile}
                   toolsOpen={mobileToolsOpen}
                   onToolsOpenChange={setMobileToolsOpen}
+                  onOpenAppearance={() => setAppearanceOpen(true)}
                 />
               </div>
             ) : (

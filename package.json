@@ -15,6 +15,7 @@
     "db:migrate": "drizzle-kit migrate",
     "postinstall": "node scripts/sync-icons.mjs",
     "zip": "node scripts/zip-repo.mjs",
+    "zip:gdrive": "node scripts/zip-repo.mjs -t --gdrive",
     "pwa:vapid": "node scripts/generate-vapid-keys.mjs",
     "dev:https": "next dev --experimental-https"
   },
